@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className="bg-brand-darker border-t border-brand/10">
+    <footer className="bg-brand-deep border-t border-brand/10">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
@@ -12,18 +12,18 @@ const Footer = () => {
               OmShakthy
             </h2>
             <p className="text-brand-light/50 text-xs tracking-[0.2em] mb-4">HOMES</p>
-            <p className="text-white/60 text-sm leading-relaxed">
+            <p className="text-white text-sm leading-relaxed">
               OmShakthy Agencies (Madras) Private Ltd. Building trust in real
               estate for more than 33 years.
             </p>
             <div className="flex gap-4 mt-4">
-              <a href="#" className="text-white/40 hover:text-brand transition-colors" aria-label="Facebook">
+              <a href="#" className="text-white hover:text-brand transition-colors" aria-label="Facebook">
                 FB
               </a>
-              <a href="#" className="text-white/40 hover:text-brand transition-colors" aria-label="Instagram">
+              <a href="#" className="text-white hover:text-brand transition-colors" aria-label="Instagram">
                 IG
               </a>
-              <a href="#" className="text-white/40 hover:text-brand transition-colors" aria-label="YouTube">
+              <a href="#" className="text-white hover:text-brand transition-colors" aria-label="YouTube">
                 YT
               </a>
             </div>
@@ -46,7 +46,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     href={link.path}
-                    className="text-white/50 text-sm hover:text-brand transition-colors"
+                    className="text-white text-sm hover:text-brand transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -71,7 +71,7 @@ const Footer = () => {
                 <li key={project}>
                   <Link
                     href="/projects"
-                    className="text-white/50 text-sm hover:text-brand transition-colors"
+                    className="text-white text-sm hover:text-brand transition-colors"
                   >
                     {project}
                   </Link>
@@ -88,17 +88,17 @@ const Footer = () => {
             <div className="flex flex-col gap-3 text-sm">
               <a
                 href="tel:04440303040"
-                className="text-white/60 hover:text-brand transition-colors"
+                className="text-white hover:text-brand transition-colors"
               >
                 📞 044 4030 3040
               </a>
               <a
                 href="mailto:marketing@omshakthy.net"
-                className="text-white/60 hover:text-brand transition-colors"
+                className="text-white hover:text-brand transition-colors"
               >
                 ✉️ marketing@omshakthy.net
               </a>
-              <p className="text-white/60">
+              <p className="text-white">
                 📍 OmShakthy Tower, 1N1 Jawaharlal Nehru Salai, Ekkaduthangal,
                 Chennai 600032
               </p>
@@ -110,10 +110,10 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-brand/5 py-4">
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-white/30 text-xs">
+          <p className="text-white text-xs">
             © {new Date().getFullYear()} OmShakthy Homes. All Rights Reserved.
           </p>
-          <Link href="/privacy" className="text-white/30 text-xs hover:text-brand transition-colors">
+          <Link href="/privacy" className="text-white text-xs hover:text-brand transition-colors">
             Privacy Policy
           </Link>
         </div>

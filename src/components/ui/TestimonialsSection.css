@@ -52,6 +52,7 @@
 .tw__header {
   position: relative;
   z-index: 2;
+  padding-top: 40px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
