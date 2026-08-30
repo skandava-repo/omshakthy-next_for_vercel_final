@@ -1,12 +1,17 @@
 'use client'
 import './LeadersSection.css'
 
-/* Ported from the "page3" leadership layout (portrait card roster +
-   editorial intro band) — replaces the previous hover-accordion design.
-   Content is Omshakthy's real leadership (same four people/photos/bios the
-   old version used), not the source demo's placeholder team. The source
-   also had a "values" strip (icons + a "Join our team" link) below the
-   roster; dropped per request. */
+/* Editorial video-intro band (video backdrop, "OUR LEADERSHIP" eyebrow,
+   "Three decades..." headline) sitting above a "meet the team" pill-card
+   roster (circular photo, name/role/tag, gold accents) ported from a
+   reference design. The roster's cards keep their pill shape; a
+   social-icon row a later pass had added is dropped here, and a numbered
+   index (01/02/03/04), a foreground timeline strip, and a supporting
+   line under the headline — all shown in that same reference — were each
+   considered and deliberately left out, per instruction. .ld3__intro-main
+   holds only the eyebrow + headline, nothing else. Content is still
+   Omshakthy's real leadership (names/roles/photos), not any reference's
+   placeholder text. */
 
 type Leader = {
   name: string
@@ -25,8 +30,6 @@ const leaders: Leader[] = [
     role: 'Chairman',
     tag: 'Vision & Legacy',
     img: '/leaders/chairman.png',
-    // Same photo/pose as the page3 source's own reference crop for this
-    // person — using its exact values rather than my own estimate.
     pos: '38% 6%',
     size: 'auto 168%',
   },
@@ -60,8 +63,11 @@ const leaders: Leader[] = [
 
 function Card({ leader, index }: { leader: Leader; index: number }) {
   return (
-    <article className="ld3__card" style={{ animationDelay: `${0.2 + index * 0.09}s` }}>
-      <div className="ld3__media">
+    <article
+      className="ld3__card"
+      style={{ animationDelay: `${0.2 + index * 0.09}s` }}
+    >
+      <div className="ld3__photo-wrap">
         {leader.img ? (
           <span
             className="ld3__photo"
@@ -75,16 +81,18 @@ function Card({ leader, index }: { leader: Leader; index: number }) {
       </div>
       <div className="ld3__body">
         <h3 className="ld3__name">{leader.name}</h3>
+        <span className="ld3__name-rule" aria-hidden="true" />
         <p className="ld3__role">{leader.role}</p>
         <p className="ld3__tag">{leader.tag}</p>
       </div>
+      <span className="ld3__card-rule" aria-hidden="true" />
     </article>
   )
 }
 
 const LeadersSection = () => {
   return (
-    <section className="ld3" id="leadership" data-snap="true" aria-label="Our leadership" data-header-theme="transparent" padding-left= "130px" padding-right="130px">
+    <section className="ld3" id="leadership" data-snap="true" aria-label="Our leadership" data-header-theme="transparent">
       <div className="ld3__intro">
         {/* Same background clip TrustedPartnersSection uses behind its
             pillars — reused here rather than the static skyline photo, so
@@ -109,6 +117,7 @@ const LeadersSection = () => {
             <br />
             One unwavering <span className="ld3__accent">vision.</span>
           </h1>
+          <span className="ld3__h1-rule" aria-hidden="true" />
         </div>
       </div>
 
@@ -117,6 +126,16 @@ const LeadersSection = () => {
           <Card key={leader.name} leader={leader} index={i} />
         ))}
       </div>
+
+      <div className="ld3__tagline">
+        <span className="ld3__tagline-dot" aria-hidden="true" />
+        <span className="ld3__tagline-line" aria-hidden="true" />
+        <p className="ld3__tagline-text">Built on values. Driven by purpose. Committed to tomorrow.</p>
+        <span className="ld3__tagline-line" aria-hidden="true" />
+        <span className="ld3__tagline-dot" aria-hidden="true" />
+      </div>
+
+      <span className="ld3__watermark" aria-hidden="true">EST. 1991</span>
     </section>
   )
 }
