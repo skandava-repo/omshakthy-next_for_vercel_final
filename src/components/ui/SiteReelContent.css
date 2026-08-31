@@ -1,0 +1,264 @@
+/* ============================================================
+   SiteReelContent — one pinned frame you scrub through by scrolling,
+   five real photographs cross-dissolving into one another. See the
+   .tsx's own comment for the reasoning.
+   ============================================================ */
+
+.sr {
+  --sr-ink: #0B1F3A;
+  --sr-ink-muted: rgba(11, 31, 58, 0.62);
+  --sr-gold: #A9782E;
+  --sr-gold-light: #C8A15A;
+  --sr-line: rgba(11, 31, 58, 0.14);
+
+  position: relative;
+  background: #FBF8F2;
+  color: var(--sr-ink);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---------------- hero (same register as the essay version) ---------------- */
+.sr__hero {
+  position: relative;
+  height: 88vh;
+  min-height: 540px;
+  overflow: hidden;
+}
+.sr__hero-photo {
+  position: absolute;
+  inset: 0;
+}
+.sr__hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sr__hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(4, 13, 26, 0.72) 0%, rgba(4, 13, 26, 0.22) 42%, rgba(4, 13, 26, 0.08) 65%);
+}
+.sr__hero-body {
+  position: absolute;
+  z-index: 1;
+  left: clamp(1.5rem, 6vw, 6rem);
+  right: clamp(1.5rem, 6vw, 6rem);
+  bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+.sr__hero-eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sr-gold-light);
+  margin: 0 0 1rem;
+}
+.sr__hero-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.6vw, 4.6rem);
+  line-height: 1.06;
+  max-width: 16ch;
+  color: #FBF8F2;
+  margin: 0;
+}
+
+/* ---------------- mission ---------------- */
+.sr__mission {
+  padding: clamp(3.5rem, 10vh, 6.5rem) clamp(1.5rem, 6vw, 6rem) clamp(2rem, 5vh, 3rem);
+  display: flex;
+  justify-content: center;
+}
+.sr__mission-text {
+  max-width: 46ch;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+  line-height: 1.55;
+  color: var(--sr-ink);
+  margin: 0;
+}
+
+/* ---------------- the reel ---------------- */
+.sr__track {
+  position: relative;
+  height: 520vh;
+}
+.sr__frame {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(102px + 1.5rem) clamp(1.5rem, 6vw, 6rem) clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.sr__stage {
+  position: relative;
+  width: 100%;
+  max-width: 1360px;
+  height: clamp(46vh, 58vh, 62vh);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(11, 31, 58, 0.2);
+}
+.sr__stage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sr__ticks {
+  display: flex;
+  gap: 0.6rem;
+  margin: clamp(1rem, 2.4vh, 1.5rem) 0;
+}
+.sr__tick {
+  position: relative;
+  width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--sr-line);
+  overflow: hidden;
+}
+.sr__tick-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 2px;
+  background: var(--sr-gold);
+}
+
+.sr__caption {
+  position: relative;
+  width: 100%;
+  max-width: 1360px;
+  min-height: clamp(140px, 18vh, 190px);
+}
+.sr__caption-set {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: clamp(2.6rem, 4vw, 3.6rem) 1fr clamp(220px, 24vw, 300px);
+  align-items: start;
+  column-gap: clamp(1.2rem, 3vw, 2.6rem);
+  padding-top: clamp(0.6rem, 1.6vh, 1rem);
+}
+.sr__caption-index {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sr-gold);
+  padding-top: 0.35rem;
+}
+.sr__caption-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.15;
+  color: var(--sr-ink);
+  margin: 0;
+}
+.sr__caption-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.sr__caption-desc {
+  font-size: clamp(0.86rem, 0.98vw, 0.95rem);
+  line-height: 1.6;
+  color: var(--sr-ink-muted);
+  margin: 0;
+}
+.sr__caption-stat {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sr-gold);
+}
+
+/* ---------------- close ---------------- */
+.sr__close {
+  padding: clamp(4rem, 12vh, 7rem) clamp(1.5rem, 6vw, 6rem);
+  display: flex;
+  justify-content: center;
+}
+.sr__close-text {
+  max-width: 42ch;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--sr-ink);
+  margin: 0;
+}
+
+/* ---------------- Responsive ----------------
+   The pinned scrub-through frame needs real scroll distance to feel
+   deliberate rather than rushed — that works fine on touch too (it's
+   still just vertical scrolling), so the only change below is spacing
+   and giving the caption grid room to stack. */
+@media (max-width: 760px) {
+  .sr__caption-set {
+    grid-template-columns: 1fr;
+    row-gap: 0.6rem;
+  }
+  .sr__caption-index {
+    padding-top: 0;
+  }
+  .sr__stage {
+    height: clamp(38vh, 44vh, 50vh);
+  }
+  .sr__track {
+    height: 420vh;
+  }
+}
+
+/* ---------------- reduced-motion static fallback ----------------
+   The .tsx swaps the whole pinned <Reel/> out for this plain stack
+   under prefers-reduced-motion, rather than just freezing the
+   crossfade — otherwise disciplines 2 through 5 would only be
+   reachable by scroll-scrubbing, which is the exact motion someone
+   with this preference has opted out of. */
+.sr__static {
+  display: flex;
+  flex-direction: column;
+}
+.sr__static-chapter {
+  border-top: 1px solid var(--sr-line);
+}
+.sr__static-chapter:last-child {
+  border-bottom: 1px solid var(--sr-line);
+}
+.sr__static-photo {
+  display: block;
+  width: 100%;
+  height: clamp(46vh, 56vh, 64vh);
+  object-fit: cover;
+}
+.sr__static-caption {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: clamp(2.6rem, 4vw, 3.6rem) 1fr clamp(220px, 24vw, 300px);
+  align-items: start;
+  column-gap: clamp(1.2rem, 3vw, 2.6rem);
+  padding: clamp(1.6rem, 4vh, 2.4rem) clamp(1.5rem, 6vw, 6rem);
+}
+
+@media (max-width: 760px) {
+  .sr__static-caption {
+    grid-template-columns: 1fr;
+    row-gap: 0.6rem;
+  }
+}

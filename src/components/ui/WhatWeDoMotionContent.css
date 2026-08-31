@@ -1,0 +1,360 @@
+/* ============================================================
+   WhatWeDoMotionContent — the kinetic/award-site register. See the
+   .tsx's own comment for why this exists alongside the three earlier
+   pages rather than replacing any of them.
+   ============================================================ */
+
+.km {
+  --km-ink: #0B1F3A;
+  --km-ink-muted: rgba(11, 31, 58, 0.62);
+  --km-gold: #A9782E;
+  --km-gold-light: #C8A15A;
+
+  position: relative;
+  background: #FBF8F2;
+  color: var(--km-ink);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---- custom cursor + spotlight — desktop mouse only. Hidden entirely
+   on touch/coarse-pointer devices via the media query below, so nobody
+   loses their real cursor; harmless on those devices even if a
+   mousemove listener never fires. ---- */
+.km__cursor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .km {
+    cursor: none;
+  }
+  .km a,
+  .km button {
+    cursor: none;
+  }
+  .km__cursor {
+    display: block;
+  }
+}
+
+.km__spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- scroll progress rail ---- */
+.km__progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  height: 3px;
+  background: linear-gradient(90deg, var(--km-gold), var(--km-gold-light));
+  transform-origin: 0% 50%;
+}
+
+/* ---- hero ---- */
+.km__hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(102px + 2rem) 1.5rem 4rem;
+  overflow: hidden;
+}
+.km__hero-eyebrow {
+  position: relative;
+  z-index: 1;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--km-gold-light);
+  margin: 0 0 1.6rem;
+}
+.km__hero-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 8vw, 6.5rem);
+  line-height: 1.02;
+  max-width: 18ch;
+  margin: 0 0 1.6rem;
+  color: var(--km-ink);
+}
+.km__hero-word {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+.km__hero-sub {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--km-ink-muted);
+  max-width: 44ch;
+  margin: 0;
+}
+.km__hero-scroll {
+  position: absolute;
+  z-index: 1;
+  bottom: clamp(1.6rem, 4vh, 2.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--km-ink-muted);
+}
+.km__hero-scroll::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 34px;
+  margin: 0.6rem auto 0;
+  background: linear-gradient(to bottom, var(--km-gold-light), transparent);
+  animation: km-scroll-line 1.8s ease-in-out infinite;
+}
+@keyframes km-scroll-line {
+  0%, 100% { opacity: 0.25; transform: scaleY(0.6); transform-origin: top; }
+  50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+}
+
+/* ---- marquee ---- */
+.km__marquee {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: #F4EFE6;
+  border-top: 1px solid rgba(11, 31, 58, 0.12);
+  border-bottom: 1px solid rgba(11, 31, 58, 0.12);
+}
+.km__marquee-track {
+  display: flex;
+  width: max-content;
+  animation: km-marquee 28s linear infinite;
+}
+.km__marquee-set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.km__marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3.6vw, 2.6rem);
+  text-transform: uppercase;
+  color: rgba(11, 31, 58, 0.78);
+  padding: clamp(0.9rem, 2vh, 1.4rem) 1.6rem;
+  white-space: nowrap;
+}
+.km__marquee-dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--km-gold-light);
+}
+@keyframes km-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ---- chapters ---- */
+.km__chapter {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.km__chapter-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2rem, 6vh, 4rem) clamp(1.5rem, 6vw, 5rem);
+}
+
+.km__chapter-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.km__chapter-bg img {
+  position: absolute;
+  inset: -6% 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+  /* Bright, not dimmed — the photo itself keeps the page light instead
+     of relying on a dark scrim to sit text over it; legibility comes
+     from the card in .km__chapter-body below, not from darkening the
+     whole image. */
+  filter: saturate(0.94) brightness(1) contrast(1.04);
+}
+.km__chapter-scrim {
+  position: absolute;
+  inset: 0;
+  /* Just enough of a light lift at the very bottom edge to blend the
+     card's own shadow into the photo — the card carries the real
+     contrast work now, not this. */
+  background: linear-gradient(0deg, rgba(251, 248, 242, 0.32) 0%, transparent 38%);
+}
+
+.km__chapter-ghost {
+  position: absolute;
+  z-index: 1;
+  top: clamp(1.5rem, 4vh, 3rem);
+  right: clamp(1.5rem, 5vw, 4rem);
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(8rem, 18vw, 16rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.62);
+  filter: drop-shadow(0 3px 10px rgba(11, 31, 58, 0.32));
+  pointer-events: none;
+}
+
+/* A real card, not text floating over a dark wash — guarantees dark
+   ink on cream stays legible regardless of what part of the photo it
+   lands on, and reads as a deliberately bright, composed page rather
+   than another dark panel. */
+.km__chapter-body {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  background: rgba(251, 248, 242, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: clamp(1.6rem, 3vw, 2.4rem) clamp(1.8rem, 3.2vw, 2.6rem);
+  box-shadow: 0 24px 48px rgba(11, 31, 58, 0.22);
+}
+.km__chapter-code {
+  display: block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--km-gold-light);
+  margin-bottom: 0.9rem;
+}
+.km__chapter-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.05;
+  color: var(--km-ink);
+  margin: 0 0 1rem;
+}
+.km__chapter-desc {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--km-ink-muted);
+  max-width: 48ch;
+  margin: 0 0 1.5rem;
+}
+.km__chapter-stat {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  color: var(--km-ink);
+}
+.km__chapter-unit {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--km-gold-light);
+  margin-left: 0.5rem;
+}
+
+/* Alternate composition per chapter for rhythm, the way the marquee/
+   hero/chapters aren't all the same shape either — even chapters push
+   their content to the right instead of the left. */
+.km__chapter:nth-of-type(even) .km__chapter-stack {
+  justify-content: flex-end;
+}
+.km__chapter:nth-of-type(even) .km__chapter-body {
+  text-align: right;
+}
+.km__chapter:nth-of-type(even) .km__chapter-ghost {
+  right: auto;
+  left: clamp(1.5rem, 5vw, 4rem);
+}
+.km__chapter:nth-of-type(even) .km__chapter-stat {
+  flex-direction: row-reverse;
+}
+.km__chapter:nth-of-type(even) .km__chapter-unit {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 760px) {
+  .km__chapter-ghost {
+    font-size: clamp(5rem, 26vw, 8rem);
+  }
+  .km__chapter-stack {
+    align-items: flex-end;
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+  .km__chapter:nth-of-type(even) .km__chapter-stack {
+    justify-content: flex-start;
+  }
+  .km__chapter:nth-of-type(even) .km__chapter-body {
+    text-align: left;
+  }
+  .km__chapter:nth-of-type(even) .km__chapter-ghost {
+    left: auto;
+    right: clamp(1rem, 5vw, 2rem);
+  }
+  .km__chapter:nth-of-type(even) .km__chapter-stat,
+  .km__chapter:nth-of-type(even) .km__chapter-unit {
+    flex-direction: row;
+    margin-left: 0.5rem;
+    margin-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .km__marquee-track {
+    animation-play-state: paused;
+  }
+  .km__hero-scroll::after {
+    animation: none;
+  }
+  .km__chapter {
+    position: relative;
+  }
+}

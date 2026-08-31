@@ -70,25 +70,15 @@ const PageController = ({ children }: PageControllerProps) => {
       timelineReset()
     }
 
-    // If current section is the Trusted Partners gallery (index 6, also
-    // the last snapped section): scrolling either direction steps through
-    // the 5 pillars one at a time, same as the timeline above but
-    // symmetric (up steps back through pillars instead of exiting
-    // immediately). Only once a boundary pillar is reached does the wheel
-    // tick fall through — up moves to the previous section, down hits the
-    // "last section" release check right below.
-    const tpGalleryAdvance = (window as any).__tpGalleryAdvance
-    const tpGalleryReset = (window as any).__tpGalleryReset
-    if (currentSection === 6 && typeof tpGalleryAdvance === 'function') {
-      const consumed = tpGalleryAdvance(dir)
-      if (consumed) {
-        isAnimating.current = true
-        setTimeout(() => { isAnimating.current = false }, 700)
-        return
-      }
-      // Boundary reached — leaving the gallery, so reset it for next time.
-      if (typeof tpGalleryReset === 'function') tpGalleryReset()
-    }
+    // TrustedPartnersSection (index 6, also the last snapped section) used
+    // to special-case here the same way the timeline does above — it was
+    // a one-pillar-at-a-time gallery stepped via a __tpGalleryAdvance hook
+    // it registered on window. It's since been rebuilt as a plain grid
+    // showing all 5 pillars at once (see TrustedPartnersSection's own
+    // comment), so it no longer registers that hook at all and there's
+    // nothing left to special-case — the wheel just falls straight
+    // through to the normal section-change logic below, same as any
+    // other slide.
 
     // At the last snapped section and still scrolling down: hand off to
     // native scroll for whatever comes after PageController, rather than

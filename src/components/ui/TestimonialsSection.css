@@ -1,9 +1,28 @@
 /* ============================================================
-   Testimonials — 3-card "Living Portrait" grid
-   Content from Figma: Customer Stories / Trusted by 20,000+ Families.
-   Innovations: cursor 3D tilt + layered parallax, moving glare,
-   animated gold corner brackets, conic gold ring, duotone→color photo.
-   ============================================================ */
+   Testimonials — video-testimonial tile grid (ported from a reference
+   design: photo tiles either side of one large featured quote card). The
+   two halves are fully independent: tiles are static video previews
+   (real buttons, no onClick — no video files exist yet to actually play,
+   see Tile's own comment in the .tsx), unrelated to whichever review the
+   featured card happens to be showing. The featured card auto-advances
+   through all 7 written testimonials on its own timer, with a fade+slide
+   transition on its inner content only (the navy frame itself never
+   moves — see FeaturedCard's comment for why). Earlier versions had these
+   two synced (tiles highlighting whichever one the card was showing) and
+   went through a click-to-select phase before that; both were replaced,
+   this is the currently-correct behavior. Header/odometer stats and the
+   marquee ribbon below keep the same structure throughout all of that.
+   Palette: white section
+   background (matching the reference's light page), dark blue as the
+   one accent color everywhere gold/yellow used to be, dark ink text.
+   The featured card itself stays a dark navy card sitting on that white
+   background — that's the reference's own light-page/dark-card contrast,
+   not something to flatten to all-white. Accent blue is a touch lighter
+   inside that dark card specifically (.tw-featured-quotemark, its
+   .tw-stars) since the richer blue used everywhere else on white would
+   have poor contrast against navy — same reason the old gold palette
+   itself wasn't one single hex value throughout, just multiple shades of
+   one family, not a full re-think per instance. */
 
 .tw {
   position: relative;
@@ -13,13 +32,15 @@
   flex-direction: column;
   justify-content: center;
   padding: clamp(3.5rem, 9vh, 7rem) clamp(1.25rem, 6vw, 6rem);
-  background:
-    radial-gradient(130% 90% at 15% 0%, #0499de 0%, #037ab8 40%, #013d57 100%);
-  color: #fff;
+  background: #f4f6f9;
+  color: #0B1F3A;
   font-family: 'Inter', sans-serif;
 }
 
-/* soft aurora */
+/* soft aurora — multiply, not screen: screen blending lightens toward the
+   backdrop, which only reads on a dark background (it washed these blobs
+   out to nothing on white). Multiply darkens instead, so they still show
+   as a soft tint here. */
 .tw__aurora {
   position: absolute;
   inset: 0;
@@ -30,45 +51,50 @@
 .tw__blob {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.4;
-  mix-blend-mode: screen;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
 }
 .tw__blob--1 {
   width: 40vw;
   height: 40vw;
   left: -8vw;
   top: -10vh;
-  background: radial-gradient(circle, rgba(200, 161, 90, 0.55), transparent 70%);
+  background: radial-gradient(circle, rgba(13, 107, 178, 0.16), transparent 70%);
 }
 .tw__blob--2 {
   width: 34vw;
   height: 34vw;
   right: -8vw;
   bottom: -12vh;
-  background: radial-gradient(circle, rgba(141, 180, 209, 0.5), transparent 70%);
+  background: radial-gradient(circle, rgba(11, 44, 78, 0.12), transparent 70%);
 }
 
 /* ---- header ---- */
 .tw__header {
   position: relative;
   z-index: 2;
+  /* No max-width/centering here (unlike .tw__grid below) — the old design
+     never centered this as its own block, it just sat flush against
+     .tw's own left padding while only the card row below it was
+     separately centered in the middle of the page. Giving both the same
+     treatment pushed this ~400px inward from where it used to sit. */
+  margin-bottom: clamp(2rem, 5vh, 3.5rem);
   padding-top: 40px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
-  margin-bottom: clamp(2rem, 5vh, 3.5rem);
 }
 .tw__eyebrow {
   display: inline-block;
   font-size: 0.9rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(255, 200, 26, 1);
+  color: #0D6BB2;
   margin-bottom: 0.9rem;
   padding: 0.4rem 0.9rem;
-  border: 1px solid rgba(255, 200, 26, 1);
+  border: 1px solid #0D6BB2;
   font-weight: 900;
   border-radius: 999px;
 }
@@ -77,11 +103,11 @@
   font-weight: 250;
   font-size: 2rem;
   line-height: 1.05;
-  color: #FBF8F2;
+  color: #0B1F3A;
 }
 .tw__title em {
   font-style: italic;
-  color: #D4B84A;
+  color: #0D6BB2;
 }
 .tw__rating {
   display: flex;
@@ -89,9 +115,9 @@
   gap: 0.9rem;
   padding: 0.9rem 1.3rem;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
+  background: #fff;
+  border: 1px solid rgba(11, 31, 58, 0.1);
+  box-shadow: 0 8px 24px rgba(11, 31, 58, 0.06);
 }
 .tw__rating-score {
   font-family: 'Playfair Display', serif;
@@ -102,7 +128,7 @@
 .tw__rating-sub {
   font-size: 0.8rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(11, 31, 58, 0.6);
   margin-top: 0.2rem;
 }
 
@@ -116,7 +142,12 @@
      heading), which sets its own color at higher specificity and would
      otherwise silently win there, leaving this color applied everywhere
      except the one place with the most visible number. */
-  color: rgba(255, 200, 26, 1) !important;
+  color: #0D6BB2 !important;
+  /* .reel below already blocks selecting the hidden spin digits; this
+     covers the rest of .odo (the "," "." "+" separators) so a drag-select
+     can't land a broken partial result like ",+" — the number just isn't
+     selectable at all, same as most animated-counter UIs. */
+  user-select: none;
 }
 .odo__sep {
   display: inline-block;
@@ -130,6 +161,14 @@
   line-height: 1.7em;
   overflow: hidden;
   vertical-align: middle;
+  /* aria-hidden (set in the component) keeps screen readers from reading
+     this — they get .odo's own aria-label ("7,500+") instead — but it
+     does nothing for mouse text-selection, which grabs whatever's in the
+     DOM regardless of clipping or ARIA state. Without this, dragging a
+     selection across the number (or Cmd+A on the page) picks up every
+     digit in the spin sequence (0-9 twice, then the partial cycle to the
+     landing value) for each digit position, not just what's visible. */
+  user-select: none;
   /* tiny fade only at the extreme top edge as a safety net — small enough
      that it never touches the (centered) landing digit */
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 7%, #000 93%, transparent);
@@ -157,296 +196,243 @@
   color: rgba(11, 31, 58, 0.18);
 }
 .tw-stars .is-on {
-  color: rgba(255, 200, 26, 1);
+  color: #0D6BB2;
 }
 
-/* ---- grid ---- */
-/* Stacked deck stage. Replaces the former 3-column grid; the section shell,
-   palette and type are unchanged. */
-.tw__deck {
+/* ---- grid: tile column / featured card / tile column ---- */
+/* CSS Grid, not flexbox — this replaced a flex row where the center
+   column (.tw-featured-stage: flex:1, its only child position:absolute)
+   kept collapsing next to the two fixed-width tile columns despite two
+   different flex-basis fixes. Grid sidesteps that whole class of bug: the
+   three explicit tracks below (fixed / flexible-but-capped / fixed) are
+   exactly what grid-template-columns is for, with no auto-basis content-
+   size ambiguity for the browser to resolve differently than expected. */
+.tw__grid {
   position: relative;
   z-index: 2;
-  height: clamp(340px, 44vh, 430px);
-  perspective: 1400px;
-  transform-style: preserve-3d;
-}
-
-/* One absolutely-centred slot per card. Framer animates this element only, so
-   the card keeps its own styling and the tilt stays independent. */
-.tw__slot {
-  position: absolute;
-  inset: 0;
+  /* Raising this alone (1120→1440px, previous pass) didn't actually widen
+     the visible content — .tw__grid's own max-width only matters if the
+     column tracks would want to exceed it; these tracks (tile clamp,
+     featured minmax) were still capped well below 1440px, so the extra
+     container width just sat unused inside it. The old auto-rotating
+     deck's cards were sized with `min(432px, 43vw)` — a real vw term, so
+     they kept growing with the viewport — where these tracks were mostly
+     flat px ceilings. Widened both the container AND the two track
+     ceilings below together so growth actually reaches this width instead
+     of stopping short of it. */
+  max-width: clamp(1300px, 90vw, 1680px);
+  margin: 0 auto;
   display: grid;
-  place-items: center;
-  transform-style: preserve-3d;
-  will-change: transform, opacity, filter;
-}
-
-/* Front pair reads as denser glass. The base .tw-card fill is only 9% -> 3%
-   white, which let the stacked cards show through and made the active cards
-   look washed out. */
-.tw__deck .tw-card.is-front {
-  background: #FBF8F2;
-  border-color: rgba(11, 31, 58, 0.14);
-  box-shadow: 0 33px 80px rgba(1, 20, 40, 0.42);
-}
-
-/* .is-front outranks .tw-card:hover, so the gold hover border is restated. */
-.tw__deck .tw-card.is-front:hover {
-  border-color: rgba(200, 161, 90, 0.55);
-}
-
-.tw__deck .tw-card {
-  /* Two cards share the front rank, so each takes roughly half the stage.
-     FRONT_X in the component is half this pair's footprint. */
-  width: min(432px, 43vw);
-  /* Static — the card never grows with its content. Longer quotes scale their
-     type down instead (--tw-quote-size, set per review in the component). */
-  height: clamp(300px, 38vh, 360px);
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: clamp(160px, 17vw, 260px) minmax(0, 900px) clamp(160px, 17vw, 260px);
   justify-content: center;
+  align-items: stretch;
+  gap: clamp(0.9rem, 2vw, 1.6rem);
+  height: clamp(360px, 46vh, 460px);
 }
 
-/* ---- card ---- */
-.tw-card {
-  --rx: 0deg;
-  --ry: 0deg;
-  position: relative;
-  border-radius: 22px;
-  padding: 1.6rem;
-  /* Brand Paper White. Stacked cards keep a little translucency so they still
-     recede; the front pair is solid. */
-  background: rgba(251, 248, 242, 0.86);
-  border: 1px solid rgba(11, 31, 58, 0.1);
-  transform-style: preserve-3d;
-  /* transform is driven by the deck (Framer) on .tw__slot; the cursor tilt is
-     applied to .tw-inner so the two never overwrite each other. */
-  transition: box-shadow 0.4s ease, border-color 0.4s ease;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
-  overflow: hidden;
-}
-.tw-card:hover {
-  border-color: rgba(200, 161, 90, 0.5);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
-}
-
-/* moving glare follows cursor */
-
-/* animated gold corner brackets */
-.tw-bracket {
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  border: 2px solid #C9A227;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  pointer-events: none;
-}
-.tw-bracket--tl {
-  top: 12px;
-  left: 12px;
-  border-right: none;
-  border-bottom: none;
-  transform: translate(6px, 6px);
-}
-.tw-bracket--br {
-  bottom: 12px;
-  right: 12px;
-  border-left: none;
-  border-top: none;
-  transform: translate(-6px, -6px);
-}
-.tw-card:hover .tw-bracket {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-
-/* layered content lifts toward viewer */
-.tw-inner {
-  position: relative;
-  transform: translateZ(40px) rotateX(var(--rx)) rotateY(var(--ry));
-  transform-style: preserve-3d;
-  transition: transform 0.25s ease;
-}
-
-.tw-top {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  margin-bottom: 1.2rem;
-}
-.tw-avatar {
-  position: relative;
-  width: 66px;
-  height: 66px;
-  flex: none;
-  transform: translateZ(30px);
-}
-.tw-avatar img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  transition: filter 0.5s ease, transform 0.6s ease;
-}
-.tw-card:hover .tw-avatar img {
-  transform: scale(1.05);
-}
-.tw-avatar-ring {
-  position: absolute;
-  inset: -5px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, #C9A227, #0499de, #D4B84A, #0499de, #C9A227);
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 0);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 0);
-  opacity: 0.6;
-  transition: opacity 0.4s ease;
-}
-.tw-card:hover .tw-avatar-ring {
-  opacity: 1;
-  animation: twSpin 4s linear infinite;
-}
-@keyframes twSpin {
-  to { transform: rotate(360deg); }
-}
-
-.tw-meta {
+/* Side columns — tiles share the column's height evenly via flex:1 on each
+   tile, so both 3-tile columns span the exact same total height as the
+   featured card (reviews.length is 7 — the 7th sits out of the grid
+   rather than force an uneven 4-and-3 split). Grid items stretch to fill
+   their track by default, so .tw__tiles needs no explicit width here —
+   the column track above already sets it. */
+.tw__tiles {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: clamp(0.6rem, 1.4vh, 1rem);
 }
-.tw-google {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: rgba(11, 31, 58, 0.6);
-  letter-spacing: 0.02em;
-}
-.tw-google svg {
-  color: #A6851E;
-}
-
-.tw-quotemark {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 2rem;
-  line-height: 0.4;
-  color: rgba(166, 133, 30, 0.45);
-  display: block;
-  height: 1.4rem;
-}
-.tw-quote {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-weight: 500;
-  font-size: var(--tw-quote-size, 0.85rem);
-  line-height: 1.5;
-  color: #0B1F3A;
-  margin: 0 0 1.4rem;
-}
-.tw-cite {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(11, 31, 58, 0.14);
-}
-.tw-name {
-  font-weight: 700;
-  font-size: 0.78rem;
-  color: #0B1F3A;
-}
-.tw-detail {
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: rgba(11, 31, 58, 0.62);
-}
-
-/* ---- video-testimonial card (alternates with the quote card) ---- */
-.tw-inner--video {
-  height: 100%;
-}
-.tw-video-thumb {
-  /* Bleeds past .tw-card's 1.6rem padding to fill the card edge-to-edge —
-     .tw-card's own overflow:hidden + border-radius clip it back to shape. */
-  position: absolute;
-  inset: -1.6rem;
-  border-radius: 22px;
+.tw-tile {
+  /* Back to real button styling (padding/background/border resets) now
+     that this is an actual <button> again — an independent video preview,
+     not synced to the featured card, so cursor:pointer + hover feedback
+     both make sense again (there's a real, honest "this is clickable"
+     affordance, even with no onClick wired up yet — see Tile's comment
+     in the .tsx for why that's still the right call with no video files
+     to actually play). */
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 16px;
   overflow: hidden;
+  border: 1.5px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
-.tw-video-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.tw-tile:hover {
+  border-color: #0D6BB2;
+  transform: translateY(-2px);
 }
-.tw-video-scrim {
+.tw-tile-photo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(1, 20, 40, 0.88) 0%, rgba(1, 20, 40, 0.22) 48%, transparent 72%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
-.tw-play {
-  /* Bottom-right — .tw-video-badge already owns the top-right corner, and
-     .tw-video-caption (name/stars/detail) is left-aligned along the
-     bottom, so the bottom-right stays clear for this. */
+.tw-tile:hover .tw-tile-photo {
+  transform: scale(1.06);
+}
+.tw-tile-scrim {
   position: absolute;
-  right: 1.4rem;
-  bottom: 1.4rem;
-  width: 64px;
-  height: 64px;
+  inset: 0;
+  background: linear-gradient(to top, rgba(1, 20, 40, 0.85) 0%, rgba(1, 20, 40, 0.1) 55%, transparent 75%);
+}
+.tw-tile-play {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  color: #0B1F3A;
-  background: rgba(255, 200, 26, 0.92);
-  box-shadow: 0 12px 30px rgba(1, 20, 40, 0.45);
+  color: #fff;
+  background: #0D6BB2;
+  box-shadow: 0 4px 12px rgba(1, 20, 40, 0.35);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
 }
-.tw-play svg {
-  margin-left: 3px; /* optical centering — the play triangle isn't symmetric */
+/* Grows + brightens on hover — the play button is the one element whose
+   job is specifically to signal "clicking this plays something," so it
+   gets the most emphatic hover feedback on the tile. */
+.tw-tile:hover .tw-tile-play {
+  transform: scale(1.15);
+  background: #0a5a94;
 }
-.tw-play:hover {
-  transform: scale(1.08);
-  background: rgba(255, 200, 26, 1);
+.tw-tile-play svg {
+  margin-left: 1px; /* optical centering — the play triangle isn't symmetric */
 }
-.tw-video-badge {
+.tw-tile-name {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
+  left: 10px;
+  right: 10px;
+  bottom: 9px;
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
   color: #fff;
-  background: rgba(1, 20, 40, 0.55);
-  backdrop-filter: blur(6px);
+  line-height: 1.2;
+  text-align: left;
 }
-.tw-video-caption {
+
+/* ---- featured card ---- */
+.tw-featured-stage {
+  /* Sizing is entirely owned by .tw__grid's own middle column track — a
+     grid item fills its track by default, so nothing needs setting here
+     for that. (No perspective here any more — that was for a 3D rotateY
+     flip transition that got replaced with a fade+scale one; see
+     FeaturedCard's own comment in the .tsx for why.) */
+  position: relative;
+}
+.tw-featured {
+  /* Now a completely static frame — background, border, shadow, brand
+     mark, quote mark never move. Only .tw-featured-body (quote + cite,
+     below) animates. Earlier versions animated this whole element as one
+     rigid block (3D flip, then fade+scale+drift) — moving the entire
+     navy card on every auto-advance is very likely what read as unstable;
+     a fixed frame with only the actual content sliding inside it is the
+     more standard, reliable pattern for a quote/testimonial carousel. */
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 1.3rem 1.4rem;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  border-radius: 22px;
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  /* Brand navy — the reference used a dark green card here; recolored to
+     this site's own ink/blue instead of copying the reference's palette. */
+  background: linear-gradient(155deg, #0B2C4E 0%, #0B1F3A 100%);
+  border: 1px solid rgba(200, 161, 90, 0.3);
+  box-shadow: 0 30px 70px rgba(1, 20, 40, 0.45);
+  overflow: hidden;
 }
-/* .tw-name / .tw-detail / .tw-stars are shared with the quote card, tuned
-   for dark ink on the paper background there — restated for light-on-photo
-   here since the caption sits over the video scrim instead. */
-.tw-video-caption .tw-stars {
-  color: rgba(255, 255, 255, 0.28);
+.tw-featured-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: none;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: clamp(1rem, 3vh, 1.6rem);
 }
-.tw-video-caption .tw-name {
+.tw-featured-brand-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.tw-featured-quotemark {
+  flex: none;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.6rem;
+  line-height: 0.4;
+  /* Lighter blue than the accent used elsewhere (#0D6BB2) — this sits on
+     the featured card's own dark navy, where that richer blue would have
+     poor contrast; a lighter tint of the same family stays visible here. */
+  color: rgba(125, 180, 235, 0.6);
+  display: block;
+  height: 1.8rem;
+}
+/* Wraps the sliding .tw-featured-body — flex:1 claims whatever vertical
+   space .tw-featured has left after the static brand mark + quote mark
+   above, and .tw-featured-body (position:absolute inset:0 within this)
+   fills and vertically centers itself in exactly that space. overflow:
+   hidden keeps the ±28px horizontal slide from poking out past this
+   card's own rounded corners while it's mid-transition. */
+.tw-featured-body-clip {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.tw-featured-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tw-featured-quote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  font-size: var(--tw-quote-size, 1.1rem);
+  line-height: 1.5;
+  color: #FBF8F2;
+  margin: 0.6rem 0 clamp(1.2rem, 3vh, 2rem);
+}
+.tw-featured-cite {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+.tw-featured-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
   color: #fff;
 }
-.tw-video-caption .tw-detail {
-  color: rgba(255, 255, 255, 0.75);
+.tw-featured-detail {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+.tw-featured .tw-stars {
+  color: rgba(255, 255, 255, 0.2);
+}
+.tw-featured .tw-stars .is-on {
+  /* Same lighter blue as .tw-featured-quotemark above, for the same
+     reason — the richer #0D6BB2 used elsewhere would sit poorly on this
+     card's own dark navy background. */
+  color: #7DB4EB;
 }
 
 /* ---- "wall of love" marquee ribbon ---- */
@@ -485,43 +471,63 @@
   padding: 0.6rem 1.1rem;
   white-space: nowrap;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fff;
+  border: 1px solid rgba(11, 31, 58, 0.1);
   font-size: 0.95rem;
 }
 .tw__chip-stars {
-  color: rgba(255, 200, 26, 1);
+  color: #0D6BB2;
   letter-spacing: 1px;
   font-size: 0.78rem;
   font-weight: 700;
 }
 .tw__chip-text {
-  color: #f2ede4;
+  color: #0B1F3A;
   font-weight: 600;
 }
 .tw__chip-name {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(11, 31, 58, 0.55);
   font-weight: 500;
 }
 
 /* ---- responsive ---- */
 @media (max-width: 900px) {
-  .tw__deck {
-    height: clamp(320px, 52vh, 420px);
+  /* Three side-by-side columns don't fit a phone width — stack them: tile
+     row, featured card, tile row, in the same DOM order the desktop
+     layout already uses (left tiles, featured, right tiles), just
+     vertical instead of horizontal. Switches .tw__grid from grid back to
+     a plain flex column for this — the 3-track grid-template-columns
+     above is a desktop-only concept, not something to reshape per
+     breakpoint. */
+  .tw__grid {
+    display: flex;
+    flex-direction: column;
+    height: auto;
   }
-
-  .tw__deck .tw-card {
-    width: min(400px, 84vw);
+  .tw-featured-stage {
+    max-width: 100%;
+    height: clamp(300px, 58vh, 420px);
+  }
+  .tw__tiles {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.7rem;
+    padding-bottom: 0.25rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  }
+  .tw-tile {
+    flex: 0 0 108px;
+    height: 108px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tw__slot {
-    filter: none !important;
-    will-change: auto;
-  }
-
-  .tw-card { transform: none !important; }
-  .tw-card:hover .tw-avatar-ring { animation: none; }
   .tw__marquee-track { animation: none; }
+}
+/* Also gated in JS (useReducedMotion, same pattern the Odometer/DigitReel
+   above already uses) as a defense-in-depth match for the media query,
+   not a replacement for it. */
+.tw__marquee-track.is-static {
+  animation: none;
 }

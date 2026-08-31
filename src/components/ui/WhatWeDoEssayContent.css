@@ -1,0 +1,192 @@
+/* ============================================================
+   WhatWeDoEssayContent — a slow editorial photo essay. See the .tsx's
+   own comment for the reasoning behind this register.
+   ============================================================ */
+
+.we {
+  --we-ink: #0B1F3A;
+  --we-ink-muted: rgba(11, 31, 58, 0.62);
+  --we-gold: #A9782E;
+  --we-gold-light: #C8A15A;
+  --we-line: rgba(11, 31, 58, 0.14);
+
+  position: relative;
+  background: #FBF8F2;
+  color: var(--we-ink);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---------------- hero ---------------- */
+.we__hero {
+  position: relative;
+  height: 92vh;
+  min-height: 560px;
+  overflow: hidden;
+}
+.we__hero-photo {
+  position: absolute;
+  inset: 0;
+}
+.we__hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.we__hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(4, 13, 26, 0.72) 0%, rgba(4, 13, 26, 0.22) 42%, rgba(4, 13, 26, 0.08) 65%);
+}
+.we__hero-body {
+  position: absolute;
+  z-index: 1;
+  left: clamp(1.5rem, 6vw, 6rem);
+  right: clamp(1.5rem, 6vw, 6rem);
+  bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+.we__hero-eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--we-gold-light);
+  margin: 0 0 1rem;
+}
+.we__hero-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2.4rem, 5.6vw, 4.6rem);
+  line-height: 1.06;
+  max-width: 16ch;
+  color: #FBF8F2;
+  margin: 0;
+}
+
+/* ---------------- mission ---------------- */
+.we__mission {
+  padding: clamp(4rem, 12vh, 7.5rem) clamp(1.5rem, 6vw, 6rem);
+  display: flex;
+  justify-content: center;
+}
+.we__mission-text {
+  max-width: 46ch;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.55;
+  color: var(--we-ink);
+  margin: 0;
+}
+
+/* ---------------- chapters ---------------- */
+.we__chapters {
+  display: flex;
+  flex-direction: column;
+}
+.we__chapter {
+  border-top: 1px solid var(--we-line);
+}
+.we__chapter:last-child {
+  border-bottom: 1px solid var(--we-line);
+}
+
+.we__chapter-photo {
+  position: relative;
+  height: clamp(56vh, 68vh, 78vh);
+  overflow: hidden;
+}
+.we__chapter-photo img {
+  position: absolute;
+  inset: -6% 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+}
+
+/* Caption sits in its own dedicated band below the photo, not overlaid
+   on it — the image stays uncluttered, the type stays uncluttered,
+   each material gets full attention instead of competing for the same
+   pixels under a scrim. */
+.we__chapter-caption {
+  display: grid;
+  grid-template-columns: clamp(3rem, 5vw, 4.5rem) 1fr clamp(240px, 26vw, 340px);
+  align-items: start;
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vh, 3.2rem) clamp(1.5rem, 6vw, 6rem);
+}
+.we__chapter-index {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--we-gold);
+  padding-top: 0.4rem;
+}
+.we__chapter-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  line-height: 1.15;
+  color: var(--we-ink);
+  margin: 0;
+}
+.we__chapter-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.we__chapter-desc {
+  font-size: clamp(0.88rem, 1vw, 0.98rem);
+  line-height: 1.6;
+  color: var(--we-ink-muted);
+  margin: 0;
+}
+.we__chapter-stat {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--we-gold);
+}
+
+/* ---------------- close ---------------- */
+.we__close {
+  padding: clamp(4rem, 12vh, 7rem) clamp(1.5rem, 6vw, 6rem);
+  display: flex;
+  justify-content: center;
+}
+.we__close-text {
+  max-width: 42ch;
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--we-ink);
+  margin: 0;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px) {
+  .we__chapter-caption {
+    grid-template-columns: 1fr;
+    row-gap: 0.9rem;
+  }
+  .we__chapter-index {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .we__hero {
+    height: 78vh;
+  }
+  .we__hero-title {
+    max-width: 100%;
+  }
+}

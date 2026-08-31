@@ -1,0 +1,238 @@
+/* ============================================================
+   WhatWeDoContent — field log. See the .tsx's own comment for why this,
+   not another arrange-N-boxes pattern (diagram/grid/accordion, all
+   tried and all rejected as the same trick in a different skin).
+   ============================================================ */
+
+.fl {
+  --fl-paper: #F4EFE6;
+  --fl-paper-deep: #ECE4D4;
+  --fl-ink: #0B1F3A;
+  --fl-ink-muted: rgba(11, 31, 58, 0.62);
+  --fl-brass: #C8A15A;
+  --fl-red: #A8452F;
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--fl-paper);
+  background-image: radial-gradient(circle, rgba(11, 31, 58, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--fl-ink);
+  font-family: 'Inter', sans-serif;
+  padding: calc(102px + 3rem) clamp(1.5rem, 6vw, 5rem) clamp(4rem, 10vh, 7rem) clamp(2.75rem, 8vw, 6.5rem);
+}
+
+/* faux ring-binder holes down the far left edge of the page */
+.fl__holes {
+  position: absolute;
+  top: calc(102px + 2rem);
+  bottom: 3rem;
+  left: clamp(0.9rem, 3vw, 2.2rem);
+  width: 8px;
+  background-image: radial-gradient(circle, rgba(11, 31, 58, 0.22) 3px, transparent 3px);
+  background-size: 8px 40px;
+  background-repeat: repeat-y;
+}
+
+/* ---------------- heading ---------------- */
+.fl__head {
+  max-width: 640px;
+  margin-bottom: clamp(3rem, 7vh, 5rem);
+}
+.fl__eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fl-red);
+  margin: 0 0 0.9rem;
+}
+.fl__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
+  line-height: 1.05;
+  color: var(--fl-ink);
+  margin: 0 0 0.9rem;
+}
+.fl__sub {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--fl-ink-muted);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* ---------------- entries ---------------- */
+.fl__entries {
+  display: flex;
+  flex-direction: column;
+}
+
+.fl__entry {
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding: clamp(2.5rem, 6vh, 4rem) 0;
+  border-bottom: 1px dashed rgba(11, 31, 58, 0.22);
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fl__entry.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fl__entry:last-child {
+  border-bottom: none;
+}
+.fl__entry:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* ---- Polaroid photo ---- */
+.fl__photo {
+  position: relative;
+  flex: none;
+  width: clamp(220px, 26vw, 320px);
+  background: #fff;
+  padding: 0.6rem 0.6rem 2.4rem;
+  box-shadow: 0 18px 36px rgba(11, 31, 58, 0.18), 0 2px 6px rgba(11, 31, 58, 0.1);
+  transform: rotate(-2.4deg);
+}
+.fl__entry:nth-child(even) .fl__photo {
+  transform: rotate(2.4deg);
+}
+.fl__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: saturate(0.92) sepia(0.06);
+}
+.fl__tape {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 78px;
+  height: 26px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(200, 161, 90, 0.55),
+    rgba(200, 161, 90, 0.55) 6px,
+    rgba(200, 161, 90, 0.4) 6px,
+    rgba(200, 161, 90, 0.4) 12px
+  );
+  opacity: 0.85;
+  box-shadow: 0 2px 4px rgba(11, 31, 58, 0.12);
+}
+
+/* ---- text column ---- */
+.fl__text {
+  flex: 1;
+  min-width: 0;
+}
+.fl__stamp {
+  display: inline-block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--fl-red);
+  border: 1.5px dashed var(--fl-red);
+  border-radius: 50%;
+  width: 4.6rem;
+  height: 4.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transform: rotate(-6deg);
+  opacity: 0.85;
+  margin-bottom: 1.1rem;
+}
+.fl__entry-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.15;
+  color: var(--fl-ink);
+  margin: 0 0 0.35rem;
+}
+.fl__entry-ref {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fl-brass);
+  margin: 0 0 0.9rem;
+}
+.fl__entry-desc {
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.65;
+  color: var(--fl-ink-muted);
+  max-width: 52ch;
+  margin: 0 0 1.3rem;
+}
+
+/* hand-circled stat — see the .tsx's HandCircle comment */
+.fl__stat {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4em 1.1em;
+}
+.fl__stat-circle {
+  position: absolute;
+  inset: -10px -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 20px);
+  pointer-events: none;
+}
+.fl__stat-circle path {
+  fill: none;
+  stroke: var(--fl-red);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.fl__stat-num {
+  position: relative;
+  z-index: 1;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  color: var(--fl-ink);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px) {
+  .fl {
+    padding-top: calc(88px + 2rem);
+    padding-left: clamp(2.25rem, 10vw, 3rem);
+  }
+  .fl__entry,
+  .fl__entry:nth-child(even) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+  .fl__photo,
+  .fl__entry:nth-child(even) .fl__photo {
+    width: min(260px, 62vw);
+    transform: rotate(-1.6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl__entry {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

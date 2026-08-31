@@ -1,0 +1,424 @@
+/* ============================================================
+   WhatWeDoCloneContent — a direct clone of a supplied reference comp.
+   See the .tsx's own comment: this file exists to match that reference,
+   not to make a new design decision.
+   ============================================================ */
+
+.wc {
+  --wc-cream: #f4f6f9;
+  --wc-navy: #14213A;
+  --wc-navy-deep: #0E1830;
+  --wc-blue: #0D6BB2;
+  --wc-blue-deep: #0a5a94;
+  --wc-blue-light: #7DB4EB;
+  --wc-muted: #5B6472;
+  --wc-line: rgba(20, 33, 58, 0.12);
+
+  position: relative;
+  box-sizing: border-box;
+  /* One screen, not a scroll — the reference is a single flat comp, not
+     a page. 100dvh (falls back to plain 100vh where dvh isn't
+     supported) accounts for mobile browser chrome so this doesn't
+     under/overshoot the real visible viewport. */
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--wc-cream);
+  color: var(--wc-navy);
+  font-family: 'Inter', sans-serif;
+  /* Was flush at exactly 102px (the header's own height) — zero
+     breathing room, so content sat right against the header's bottom
+     edge. A little extra clears that without eating much into the
+     one-screen height budget. */
+  padding-top: calc(102px + 1.25rem);
+  /* .wc__footer used to be a second flex child here, reserving its own
+     ~4.5rem at the bottom of the one-screen height budget. Removing it
+     outright let .wc__body's flex:1 rows/left-column expand to fill
+     that freed space and grow/shift with it. This keeps that space
+     reserved and empty instead, so nothing above stretches into it and
+     the layout sits exactly where it did before — just with no text or
+     line filling the reserved strip. */
+  padding-bottom: clamp(2.5rem, 5.5vh, 4.5rem);
+}
+
+.wc__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* Vertical dot–line–text–line–dot divider between the two columns —
+   same motif as LeadersSection's .ld3__tagline, just rotated. Sits as
+   a third flex child between .wc__left and .wc__right; .wc__body's
+   align-items:stretch already gives it the full column height for
+   free, matching both columns. */
+.wc__divider {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: clamp(1.5rem, 4vh, 3rem) 0;
+}
+.wc__divider-dot {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--wc-blue);
+}
+.wc__divider-line {
+  flex: 1 1 auto;
+  width: 1px;
+  background: rgba(13, 107, 178, 0.35);
+}
+
+/* ---------------- left panel ---------------- */
+.wc__left {
+  position: relative;
+  /* Was 38%, then over-corrected to 30% — that broke the title's wrap
+     (font-size clamp up to 3.3rem needs more room than a 30% column
+     gives, at min-width:340px). 36% closes most of the original dead
+     gutter without breaking the headline. */
+  flex: 0 0 37%;
+  min-width: 340px;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* This panel is now nothing but stacked left-aligned type on flat
+     background — plain next to five real photographs on the right. A
+     very faint photographic backdrop plus a thin fading accent line
+     give it real texture without competing with the text or bringing
+     back the card box/motto that were deliberately removed. */
+  isolation: isolate;
+  /* Centered, not top-aligned — this column's content got considerably
+     shorter once the stat card's box/motto/badge were stripped out, so
+     top-aligning it next to .wc__right's full-height five rows left a
+     large dead void below "YEARS IN OPERATION" with nothing down there.
+     Centering distributes that leftover space evenly above and below
+     instead of dumping all of it at the bottom. */
+  justify-content: center;
+  /* Right padding was the same clamp(2rem,4.5vw,4rem) as the left/outer
+     edge — stacked with .wc__right's own left padding just below, that
+     doubled up into an ~8rem dead gutter between the two columns at
+     wide viewports. The inner (right) edge gets much less room; the
+     outer (left) edge is bumped up instead — was reading as hugging
+     the browser edge — to clamp(1.5rem,6vw,6rem), the same outer-margin
+     value the rest of this project's full-bleed pages already use. */
+  padding: clamp(1.2rem, 3vh, 2.2rem) clamp(0.75rem, 1.5vw, 1.25rem) clamp(1.5rem, 3vh, 2.5rem) clamp(2.5rem, 9vw, 9rem);
+}
+
+/* A thin fading accent line along the panel's outer edge — the one bit
+   of "frame" this panel has left, now that the card's own border/
+   corner-brackets are gone. */
+.wc__left::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, var(--wc-blue), transparent);
+}
+
+.wc__eyebrow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wc-blue);
+  margin: 0 0 clamp(1.5rem, 4vh, 2.6rem);
+}
+.wc__eyebrow-line {
+  width: 48px;
+  height: 1px;
+  background: var(--wc-blue);
+}
+
+.wc__title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.2vw, 3.3rem);
+  line-height: 1.12;
+  margin: 0 0 clamp(1.5rem, 4vh, 2.6rem);
+}
+.wc__title-line {
+  display: block;
+}
+.wc__title-line--accent {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--wc-blue);
+}
+
+.wc__para {
+  position: relative;
+  z-index: 1;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--wc-muted);
+  max-width: 46ch;
+  margin: 0 0 clamp(2rem, 5vh, 3.5rem);
+}
+
+/* ---- stat card ---- */
+.wc__card {
+  position: relative;
+  z-index: 1;
+  /* Left-aligned, not centered — with the box gone this is just more
+     text in the same column as the eyebrow/title/paragraph above it;
+     centering it independently made it read as an orphaned floating
+     block instead of part of the same left-aligned column. */
+  text-align: left;
+  margin-left: 9%;
+}
+
+.wc__card-est {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 1.0rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wc-blue-deep);
+  margin: 0 0 1.3rem;
+}
+.wc__card-num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  /* Was capped at 4.2rem — small for what's meant to be the one hero
+     figure on this page. This is the actual headline number now. */
+  font-size: clamp(6rem, 9vw, 11.0rem);
+  line-height: 1.2;
+  color: var(--wc-blue);
+  /* The box-model gap above this (14px, checked) is fine — the visible
+     gap is much bigger than that because Playfair Display's numerals
+     carry a lot of invisible line-box space above their actual ink at
+     this size. Negative margin compensates so the *visual* gap matches
+     the rest of the block's rhythm instead of the CSS one. */
+  margin: -0.38em 0 0;
+}
+.wc__card-plus {
+  color: var(--wc-blue);
+  font-size: 0.42em;
+  /* vertical-align:top aligned this to the *line box* top, not the
+     numeral's own visual top — at this font size that put it floating
+     well above and disconnected from "30" instead of sitting at its
+     shoulder. Nudged down with a relative offset to actually sit next
+     to the numeral. */
+  vertical-align: top;
+  position: relative;
+  top: 1.05em;
+  margin-left: -0.12em;
+}
+.wc__card-label {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wc-blue-deep);
+  margin: 1.3rem 0 0;
+}
+/* ---------------- right panel ---------------- */
+.wc__right {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Same fix as .wc__left: inner (left) edge gets a small padding
+     instead of stacking with .wc__left's own right padding; outer
+     (right) edge matches the same clamp(1.5rem,6vw,6rem) margin now
+     used on .wc__left's outer edge, for symmetry. */
+  padding: 0 clamp(2.5rem, 9vw, 9rem) 0 clamp(1.1rem, 2vw, 1.75rem);
+}
+
+/* Five equal flex rows filling exactly whatever height .wc__right has
+   to give — not fixed/clamped row heights — so all five plus the left
+   column always land within one screen instead of pushing the page
+   taller than the viewport. */
+/* display:flex + align-items:stretch, not display:grid — a CSS Grid
+   row track's height only stretches to fill its container under
+   specific conditions, and a percentage height on a grid item (the
+   photo, below) sizing against that track is a well-known circular-
+   sizing trap: it resolved to something far taller than the row, which
+   is exactly what broke into the overlapping-rows mess. Flexbox stretch
+   fills a flex item's cross-size with no percentage math involved,
+   which is what actually behaves predictably here. */
+.wc__row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.7rem);
+  padding: clamp(0.4rem, 1.4vh, 0.9rem) 0;
+  border-top: 1px solid var(--wc-line);
+  /* Rows are equal fixed-height flex shares (five of them, one screen)
+     — if a title ever wraps to a second line at a narrower width, that
+     content needs more room than its row has, and without this it
+     spills straight into the row below instead of just... not fitting.
+     Clipped is a contained failure; overlapping the next row's own
+     content is a broken one. */
+  overflow: hidden;
+}
+.wc__row:first-child {
+  border-top: none;
+}
+
+.wc__row-tick {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--wc-blue);
+  margin-top: 0.4rem;
+}
+
+.wc__row-icon {
+  width: clamp(52px, 5vw, 64px);
+  height: clamp(52px, 5vw, 64px);
+  border-radius: 50%;
+  background: var(--wc-navy-deep);
+  border: 2px solid var(--wc-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  align-self: center;
+}
+.wc__row-icon svg {
+  width: 52%;
+  height: 52%;
+  fill: none;
+  stroke: var(--wc-blue-light);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wc__row-photo {
+  position: relative;
+  /* The photo is the one flexible element in the row — it grows on a
+     wide window and shrinks on a narrow one (down to a 140px floor).
+     The text column next to it is a fixed width (see .wc__row-text)
+     and never resizes, so it can never wrap/break; the photo absorbs
+     every bit of the size change instead. */
+  flex: 1 1 auto;
+  min-width: 140px;
+  /* No explicit height — align-items:stretch on .wc__row (a flex
+     container) fills this to the row's full height on its own, no
+     percentage-height math needed. */
+  clip-path: polygon(7% 0%, 100% 0%, 100% 100%, 0% 100%);
+  filter: drop-shadow(0 10px 16px rgba(20, 33, 58, 0.28));
+}
+.wc__row-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The Land Aggregation photo is a flat, cool daytime aerial shot next
+   to four consistently warm/dusk-lit photos — a subtle grade to bring
+   it into the same tonal family, not a replacement image. */
+.wc__row:first-child .wc__row-photo img {
+  filter: sepia(0.22) saturate(1.15) brightness(0.98) hue-rotate(-6deg);
+}
+
+.wc__row-text {
+  /* Fixed width, not flexible at all (flex-grow:0, flex-shrink:0) —
+     this is the content that actually breaks if it's squeezed (title
+     wraps, overlaps the row below). The photo is what resizes with the
+     window instead; this column stays the same width regardless. */
+  flex: 0 0 340px;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.wc__row-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  color: var(--wc-navy);
+  margin-bottom: 0.4rem;
+}
+.wc__row-text .wc__row-tick {
+  margin: 0 0 0.6rem;
+}
+.wc__row-desc {
+  font-size: clamp(0.82rem, 0.94vw, 0.9rem);
+  line-height: 1.5;
+  color: var(--wc-muted);
+  max-width: 100%;
+}
+
+/* ---------------- Responsive ----------------
+   The one-screen "snap" layout is a desktop reading of the reference
+   comp's fixed proportions — five rows each with a photo simply can't
+   fit one mobile viewport without becoming illegibly small, so below
+   980px this reverts to a normal scrolling page instead of clipping
+   content that has nowhere left to shrink. */
+@media (max-width: 980px) {
+  .wc {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding-top: calc(88px + 1.5rem);
+  }
+  .wc__body {
+    flex-direction: column;
+    overflow: visible;
+  }
+  .wc__left {
+    flex: none;
+    min-width: 0;
+    overflow: visible;
+    /* Stacked now, so the left/right asymmetry that closes the gap
+       between side-by-side columns on desktop doesn't apply — both
+       edges need equal, real margin again. */
+    padding-right: clamp(1.5rem, 6vw, 3rem);
+  }
+  .wc__right {
+    flex: none;
+    overflow: visible;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+    padding-left: clamp(1.5rem, 6vw, 3rem);
+  }
+  .wc__row {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 1.2rem 0;
+  }
+  /* Desktop gives these children fixed flex-basis values for the
+     side-by-side row layout — in column direction those would apply to
+     height instead of width, fighting the sizes set here. Reset to
+     auto/none so this block's own sizing wins. */
+  .wc__row-icon,
+  .wc__row-text {
+    flex: none;
+    align-self: stretch;
+  }
+  .wc__row-photo {
+    flex: none;
+    width: 100%;
+    height: 44vw;
+    max-height: 220px;
+  }
+}

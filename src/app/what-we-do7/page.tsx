@@ -1,0 +1,20 @@
+import type { Metadata } from 'next'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import WhatWeDoCloneContent from '@/components/ui/WhatWeDoCloneContent'
+
+export const metadata: Metadata = {
+  title: 'What We Do',
+  description:
+    'One group. Five disciplines, built in-house — land aggregation, residential development, hospitality management, commercial projects and supply chain.',
+}
+
+export default function WhatWeDo7Page() {
+  return (
+    <>
+      <Header />
+      <WhatWeDoCloneContent />
+      <Footer />
+    </>
+  )
+}

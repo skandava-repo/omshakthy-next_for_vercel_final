@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { useInView, useReducedMotion, motion, AnimatePresence } from 'framer-motion'
 import './TestimonialsSection.css'
 
 interface Review {
@@ -9,9 +9,9 @@ interface Review {
   detail: string
   photo: string
   rating: number
-  // Alternates the card with a video-thumbnail layout (poster + play button)
-  // instead of the written quote. `photo` doubles as the poster image since
-  // there's no actual video file per customer yet — see `video` field below.
+  // No real video files exist per customer yet — `video: true` just adds a
+  // small play-icon hint on that person's tile; the featured card itself
+  // still just shows their written quote (there's nothing to play).
   video?: boolean
   videoDuration?: string
 }
@@ -19,9 +19,6 @@ interface Review {
 // Content sourced from the Figma "Customer Stories" section.
 // NOTE: `photo` images in /public/testimonials are royalty-free placeholders
 // (randomuser.me). Swap them for real customer / licensed Indian portraits.
-// `video: true` entries render a video-testimonial card (see DeckCard) —
-// no real video files exist yet, so the poster/play button is a styled
-// affordance only; wire `videoSrc` up once actual clips are shot/uploaded.
 const reviews: Review[] = [
   {
     quote:
@@ -88,6 +85,24 @@ const reviews: Review[] = [
     videoDuration: '0:52',
   },
 ]
+
+// Tiles are video-testimonials only now — only 4 of the 7 reviews above
+// have `video: true`. Padded to 6 (3-and-3 tile columns) by repeating the
+// existing video reviews as a dev-stage placeholder, per instruction,
+// until enough real video-testimonial customers exist to fill 6 distinct
+// slots. Written dynamically (not two hardcoded duplicate entries) so it
+// keeps working correctly once more real video reviews get added above —
+// it'll just repeat less, then stop repeating once there are 6+.
+const videoReviews: Review[] = (() => {
+  const withVideo = reviews.filter((r) => r.video)
+  const padded = [...withVideo]
+  let i = 0
+  while (padded.length < 6) {
+    padded.push(withVideo[i % withVideo.length])
+    i++
+  }
+  return padded.slice(0, 6)
+})()
 
 const Stars = ({ n }: { n: number }) => (
   <span className="tw-stars" aria-label={`${n} out of 5 stars`}>
@@ -185,199 +200,136 @@ const highlights = [
   { t: 'Value up 22% in just 18 months.', n: 'Suresh R.' },
 ]
 
-/* ── Stacked deck ─────────────────────────────────────────────────────────────
-   One card at the front with two layered behind on each side. Depth is a pure
-   transform/opacity/filter mapping off the card's offset from the active index,
-   so every animated property is compositor-driven.
+/* The featured card is a fixed height (so switching quotes doesn't jump the
+   layout), so the quote's type scales to fit it instead — same idea the old
+   deck used, kept here for the same reason. */
+const quoteSize = (len: number) => {
+  const size = 1.35 - Math.max(0, len - 100) * 0.0022
+  return `${Math.max(1.05, Math.min(1.35, size)).toFixed(3)}rem`
+}
 
-   Only 3 testimonials exist, so the ring repeats them. Any window wider than 3
-   unavoidably repeats a quote — the ±2 rank is therefore blurred to 5px and
-   held at 24% opacity so the text there is not readable, and the ordering keeps
-   duplicates 3 positions apart so they are never adjacent. */
-const DECK_REPEAT = 2
+const PlayIcon = () => (
+  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden>
+    <path fill="currentColor" d="M8 5.5v13l11-6.5-11-6.5z" />
+  </svg>
+)
+
+/* One tile in the side columns — its own independent video preview, with
+   no relationship to the featured card at all (no shared active index,
+   no "now playing" badge). A real <button>, same as the original deck's
+   own video-card play button, but with no onClick: there's no actual
+   video file for any customer yet (checked — only photos exist in
+   public/testimonials), so this is honest structural affordance for
+   "this would play a video" rather than a fake handler that does nothing
+   when clicked. Native button semantics still give it real keyboard
+   focus/hover for free, which a plain aria-hidden div wouldn't. */
+function Tile({ review }: { review: Review }) {
+  return (
+    <button type="button" className="tw-tile" aria-label={`Play video testimonial from ${review.name}`}>
+      <img className="tw-tile-photo" src={review.photo} alt="" loading="lazy" />
+      <span className="tw-tile-scrim" aria-hidden />
+      <span className="tw-tile-play" aria-hidden>
+        <PlayIcon />
+      </span>
+      <span className="tw-tile-name">{review.name}</span>
+    </button>
+  )
+}
+
+/* Large featured card — auto-advances through ALL of `reviews` (all 7,
+   written + video ones alike) on its own timer, completely independent
+   of the video tiles either side of it: no shared index, no relationship
+   to which tile (if any) a screen reader/sighted user is looking at.
+   Keyed on `activeKey` (the rotation index) rather than the review's own
+   name/identity, purely so Framer always sees a "new" key on every
+   advance — irrelevant now that this cycles the full, non-repeating
+   `reviews` list (name collisions were only a videoReviews problem), but
+   using the index is still the simpler, more obviously-correct choice
+   than a value that happens to also be unique here. `reduce` collapses the
+   transition to an instant swap, same pattern the Odometer above uses for
+   prefers-reduced-motion rather than relying on the CSS media query alone
+   (Framer's animate/exit props aren't touched by that media query on
+   their own — they need to be told directly).
+
+   The navy card frame (.tw-featured — background, border, shadow, brand
+   mark, quote mark) is now completely static; only the actual per-review
+   content (.tw-featured-body: quote + cite) is what animates, sliding
+   horizontally like flipping through pages inside a fixed window. Earlier
+   attempts (a literal 3D rotateY flip, then a fade+scale+drift) both
+   moved the ENTIRE card as one rigid block — that's very likely what read
+   as unstable/wrong: the whole navy frame jumping or spinning on every
+   auto-advance. Keeping the frame still and only sliding the content is
+   the more standard, reliably-polished pattern for quote/testimonial
+   carousels. Same proven easing curve as before
+   (cubic-bezier(0.16,1,0.3,1)) — already used elsewhere in this codebase
+   (the original deck's card transitions, LeadersSection's card
+   entrances), not reinvented per attempt. */
+function FeaturedCard({ review, reduce, activeKey }: { review: Review; reduce: boolean; activeKey: number }) {
+  return (
+    <div className="tw-featured-stage">
+      <article className="tw-featured">
+        <div className="tw-featured-brand">
+          <img src="/omshakthy-logo.png" alt="" className="tw-featured-brand-mark" />
+          OMSHAKTHY
+        </div>
+        <span className="tw-featured-quotemark" aria-hidden>
+          &ldquo;
+        </span>
+        <div className="tw-featured-body-clip">
+          <AnimatePresence>
+            <motion.div
+              key={activeKey}
+              className="tw-featured-body"
+              initial={reduce ? false : { opacity: 0, x: 28 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={reduce ? undefined : { opacity: 0, x: -28 }}
+              transition={{ duration: reduce ? 0.01 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+              style={{ '--tw-quote-size': quoteSize(review.quote.length) } as React.CSSProperties}
+              aria-live="polite"
+            >
+              <blockquote className="tw-featured-quote">{review.quote}</blockquote>
+              <footer className="tw-featured-cite">
+                <div>
+                  <span className="tw-featured-name">{review.name}</span>
+                  <span className="tw-featured-detail">{review.detail}</span>
+                </div>
+                <Stars n={review.rating} />
+              </footer>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </article>
+    </div>
+  )
+}
+
+// How long the featured card holds each testimonial before advancing to
+// the next one.
 const ROTATE_MS = 5000
 
-/* Two cards share the front rank, so the deck reads as a pair with the rest
-   fanned behind on both sides.
-
-   Offset -> (rank, side):  p<=0 goes left at rank -p, p>=1 goes right at rank
-   p-1. With 6 slots that fills exactly rank 0/1/2 on each side.
-
-   FRONT_X is half the front pair's footprint; each rank steps further out by
-   `dx`. Previously the steps (172/304px) were far smaller than the 560px card,
-   so the stack hid behind the front card instead of fanning out. */
-const FRONT_X = 232
-
-const DEPTH = [
-  { dx: 0, z: 0, scale: 1, opacity: 1, blur: 0, ry: 0 },
-  { dx: 250, z: -170, scale: 0.88, opacity: 0.34, blur: 4, ry: 12 },
-  { dx: 430, z: -330, scale: 0.78, opacity: 0.16, blur: 7, ry: 16 },
-]
-const MAX_RANK = DEPTH.length - 1
-
-/* The card is a fixed size, so the quote's type scales to fit it instead.
-   1.22rem is the design size; it eases down to a 1.02rem floor as the quote
-   gets longer. */
-const quoteSize = (len: number) => {
-  const size = 1.22 - Math.max(0, len - 115) * 0.0022
-  return `${Math.max(1.02, Math.min(1.22, size)).toFixed(3)}rem`
-}
-
-const place = (p: number) =>
-  p <= 0 ? { rank: -p, side: -1 } : { rank: p - 1, side: 1 }
-
-const DeckCard = ({
-  review,
-  offset,
-  isActive,
-}: {
-  review: Review
-  offset: number
-  isActive: boolean
-}) => {
-  const ref = useRef<HTMLElement>(null)
-  const { rank, side } = place(offset)
-  const hidden = rank > MAX_RANK
-  const d = DEPTH[Math.min(rank, MAX_RANK)]
-
-  // Cursor-driven 3D tilt + glare position (front card only)
-  const onMove = (e: React.MouseEvent) => {
-    const el = ref.current
-    if (!el || !isActive) return
-    const r = el.getBoundingClientRect()
-    const x = (e.clientX - r.left) / r.width
-    const y = (e.clientY - r.top) / r.height
-    el.style.setProperty('--rx', `${(0.5 - y) * 10}deg`)
-    el.style.setProperty('--ry', `${(x - 0.5) * 12}deg`)
-  }
-  const onLeave = () => {
-    const el = ref.current
-    if (!el) return
-    el.style.setProperty('--rx', '0deg')
-    el.style.setProperty('--ry', '0deg')
-  }
-
-  return (
-    <motion.div
-      className="tw__slot"
-      style={{ zIndex: 20 - rank, pointerEvents: isActive ? 'auto' : 'none' }}
-      animate={{
-        x: side * (FRONT_X + d.dx),
-        z: d.z,
-        scale: d.scale,
-        rotateY: -side * d.ry,
-        opacity: hidden ? 0 : d.opacity,
-        filter: `blur(${d.blur}px)`,
-      }}
-      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-      aria-hidden={!isActive}
-    >
-      <article
-        ref={ref}
-        className={`tw-card${isActive ? ' is-front' : ''}${review.video ? ' tw-card--video' : ''}`}
-        style={
-          { '--tw-quote-size': quoteSize(review.quote.length) } as React.CSSProperties
-        }
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-      >
-      {/* animated gold corner brackets */}
-      <span className="tw-bracket tw-bracket--tl" aria-hidden />
-      <span className="tw-bracket tw-bracket--br" aria-hidden />
-
-      {/* layered content — different translateZ for parallax depth */}
-      {review.video ? (
-        <div className="tw-inner tw-inner--video">
-          <div className="tw-video-thumb">
-            <img src={review.photo} alt={review.name} loading="lazy" />
-            <span className="tw-video-scrim" aria-hidden />
-            {/* No real video file exists per customer yet — this is a styled
-                affordance, not wired to playback. Point it at a real source
-                (videoSrc on the Review) once clips are shot/uploaded. */}
-            <button
-              type="button"
-              className="tw-play"
-              aria-label={`Play video testimonial from ${review.name}`}
-            >
-              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
-                <path fill="currentColor" d="M8 5.5v13l11-6.5-11-6.5z" />
-              </svg>
-            </button>
-            {review.videoDuration && (
-              <span className="tw-video-badge">▶ {review.videoDuration}</span>
-            )}
-            <div className="tw-video-caption">
-              <Stars n={review.rating} />
-              <span className="tw-name">{review.name}</span>
-              <span className="tw-detail">{review.detail}</span>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="tw-inner">
-          <div className="tw-top">
-            <div className="tw-avatar">
-              <span className="tw-avatar-ring" aria-hidden />
-              <img src={review.photo} alt={review.name} loading="lazy" />
-            </div>
-            <div className="tw-meta">
-              <Stars n={review.rating} />
-              <span className="tw-google">
-                <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden>
-                  <path
-                    fill="currentColor"
-                    d="M12 11v2.8h4c-.2 1-1.3 3-4 3a4.4 4.4 0 010-8.8c1.3 0 2.1.5 2.6 1l1.9-1.8C15.3 6.1 13.8 5.5 12 5.5a6.5 6.5 0 100 13c3.8 0 6.3-2.6 6.3-6.4 0-.4 0-.7-.1-1H12z"
-                  />
-                </svg>
-                Verified Review
-              </span>
-            </div>
-          </div>
-
-          <span className="tw-quotemark" aria-hidden>
-            &ldquo;
-          </span>
-          <blockquote className="tw-quote">{review.quote}</blockquote>
-
-          <footer className="tw-cite">
-            <span className="tw-name">{review.name}</span>
-            <span className="tw-detail">{review.detail}</span>
-          </footer>
-        </div>
-      )}
-      </article>
-    </motion.div>
-  )
-}
-
 const TestimonialsSection = () => {
-  // The ring repeats the source reviews so the deck has enough ranks to fill.
-  const deck = useMemo(
-    () => Array.from({ length: DECK_REPEAT }, () => reviews).flat(),
-    [],
-  )
-  const n = deck.length
-  const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [centerIndex, setCenterIndex] = useState(0)
   const reduce = useReducedMotion()
+  // 3 tiles left / 3 right — videoReviews is always padded to exactly 6
+  // (see its own comment), so this split is never uneven the way slicing
+  // the full 7-review `reviews` array was. No index/state of their own —
+  // these are static video previews, independent of the featured card.
+  const left = videoReviews.slice(0, 3)
+  const right = videoReviews.slice(3, 6)
 
+  // Drives ONLY the featured card, cycling all 7 reviews — entirely
+  // separate from the (static) video tiles above. Stopped entirely under
+  // prefers-reduced-motion rather than just skipping the transition
+  // animation: an auto-advancing carousel with no way to pause it is
+  // itself a motion concern, not just the transition between states.
   useEffect(() => {
-    if (paused || reduce) return
-    const id = setInterval(() => setActive((a) => (a + 1) % n), ROTATE_MS)
+    if (reduce) return
+    const id = setInterval(() => setCenterIndex((a) => (a + 1) % reviews.length), ROTATE_MS)
     return () => clearInterval(id)
-  }, [paused, reduce, n])
-
-  // Signed distance to the active card, wrapped so cards travel the short way
-  // round rather than sweeping across the stage.
-  const offsetOf = (i: number) => {
-    let o = (i - active) % n
-    if (o > n / 2) o -= n
-    if (o < -n / 2) o += n
-    return o
-  }
+  }, [reduce])
 
   return (
-    <section className="tw" aria-label="Customer testimonials">
+    <section className="tw" id="testimonials" aria-label="Customer testimonials">
       <div className="tw__aurora" aria-hidden>
         <span className="tw__blob tw__blob--1" />
         <span className="tw__blob tw__blob--2" />
@@ -402,30 +354,32 @@ const TestimonialsSection = () => {
         </div>
       </header>
 
-      {/* Auto-rotating stacked deck. Pauses only on keyboard focus — a hover
-          pause stopped rotation whenever the cursor merely rested anywhere in
-          this full-width band, which read as the rotation being broken. */}
-      <div
-        className="tw__deck"
-        onFocusCapture={() => setPaused(true)}
-        onBlurCapture={() => setPaused(false)}
-      >
-        {deck.map((r, i) => {
-          const offset = offsetOf(i)
-          return (
-            <DeckCard
-              key={`${r.name}-${i}`}
-              review={r}
-              offset={offset}
-              isActive={place(offset).rank === 0}
-            />
-          )
-        })}
+      {/* Video-testimonial tiles either side of one large featured card —
+          two entirely independent things, not a synced pair. Tiles are
+          static video previews (real buttons, own focus/hover, no
+          onClick yet — see Tile's own comment for why); the featured card
+          auto-advances through all 7 written testimonials on its own
+          timer, unrelated to whichever tile a visitor happens to be
+          looking at. */}
+      <div className="tw__grid">
+        <div className="tw__tiles">
+          {left.map((r, i) => (
+            <Tile key={`${r.name}-${i}`} review={r} />
+          ))}
+        </div>
+
+        <FeaturedCard review={reviews[centerIndex]} reduce={!!reduce} activeKey={centerIndex} />
+
+        <div className="tw__tiles">
+          {right.map((r, i) => (
+            <Tile key={`${r.name}-${i + left.length}`} review={r} />
+          ))}
+        </div>
       </div>
 
       {/* auto-scrolling "wall of love" ribbon */}
       <div className="tw__marquee" aria-hidden>
-        <div className="tw__marquee-track">
+        <div className={`tw__marquee-track${reduce ? ' is-static' : ''}`}>
           {[...highlights, ...highlights, ...highlights].map((h, i) => (
             <span className="tw__chip" key={i}>
               <span className="tw__chip-stars">★★★★★</span>
