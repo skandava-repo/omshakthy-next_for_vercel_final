@@ -1,16 +1,21 @@
 .ms-section{position:relative;
+  /* Blue revamp: this section previously used ~11 distinct blue hexes of
+     its own (a whole atmosphere gradient plus card/text tones). Every one
+     is now one of exactly 3 — the same 3 TestimonialsSection standardized
+     on: #0D6BB2 base, #004385 deep, #7DB4EB light. --ms-navy/--ms-ivory
+     stay untouched — those are the ink/paper family, not accent blue. */
   --ms-blue:#0D6BB2;--ms-navy:#0B1F3A;--ms-ivory:#FBF8F2;
-  --ms-blue-lit:#3D96D6;--ms-blue-pale:#7FC0EF;
+  --ms-blue-lit:#7DB4EB;--ms-blue-pale:#7DB4EB;
   /* data pair: light step = cleared, deep step = blocked */
-  --ms-cleared:#0D6BB2;--ms-blocked:#08375F;
-  --ms-glass:rgba(11,90,155,.5);
+  --ms-cleared:#0D6BB2;--ms-blocked:#004385;
+  --ms-glass:rgba(10,90,148,.5);
   --ms-hair:rgba(251,248,242,.12);
   /* Blue is the plane, end to end. Navy is reduced to a thin seam at the very
      top and bottom edges (~5% of the surface) instead of anchoring the field. */
   background:
-    radial-gradient(ellipse 1200px 760px at 50% 44%,rgba(30,130,200,.6),transparent 72%),
-    linear-gradient(180deg,#0a3a66 0%,var(--ms-blue) 8%,#1279c6 30%,
-      #1a86d2 50%,#1279c6 70%,var(--ms-blue) 92%,#0a3a66 100%)}
+    radial-gradient(ellipse 1200px 760px at 50% 44%,rgba(13,107,178,.6),transparent 72%),
+    linear-gradient(180deg,#004385 0%,var(--ms-blue) 8%,#0D6BB2 30%,
+      #0D6BB2 50%,#0D6BB2 70%,var(--ms-blue) 92%,#004385 100%)}
 
 /* Pinned stage — 3 explicit rows: header, rail, then the card deck takes the
    remaining space and centres inside it. (Flex centring left a dead ~180px
@@ -39,18 +44,18 @@
 /* Corners only, and lighter at the bottom now that the city fills it. */
 .ms-vignette{position:absolute;inset:0;pointer-events:none;z-index:1;
   background:
-    radial-gradient(ellipse 138% 106% at 50% 46%,transparent 72%,rgba(10,58,102,.34) 100%),
-    linear-gradient(180deg,rgba(10,58,102,.34) 0%,transparent 14%,transparent 95%,rgba(10,58,102,.16) 100%)}
+    radial-gradient(ellipse 138% 106% at 50% 46%,transparent 72%,rgba(10,90,148,.34) 100%),
+    linear-gradient(180deg,rgba(10,90,148,.34) 0%,transparent 14%,transparent 95%,rgba(10,90,148,.16) 100%)}
 .ms-grain{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.035;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 .ms-horizon{position:absolute;left:0;right:0;top:30%;height:1px;z-index:1;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(61,150,214,.3),rgba(251,248,242,.16),rgba(61,150,214,.3),transparent)}
+  background:linear-gradient(90deg,transparent,rgba(125,180,235,.3),rgba(251,248,242,.16),rgba(125,180,235,.3),transparent)}
 /* One ambient layer, not three: a very slow cool-light drift above the skyline.
    28s and barely-there opacity — it reads as atmosphere, not as an effect. */
 .ms-aurora{position:absolute;left:-20%;right:-20%;top:0;height:56%;z-index:0;pointer-events:none;
   background:
     radial-gradient(ellipse 42% 60% at 28% 40%,rgba(13,107,178,.3),transparent 70%),
-    radial-gradient(ellipse 34% 52% at 68% 32%,rgba(61,150,214,.18),transparent 70%);
+    radial-gradient(ellipse 34% 52% at 68% 32%,rgba(125,180,235,.18),transparent 70%);
   filter:blur(38px);opacity:.85;
   animation:auroraDrift 28s ease-in-out infinite alternate}
 @keyframes auroraDrift{
@@ -93,9 +98,9 @@
 .ms-rail{height:2px;background:rgba(251,248,242,.09);position:relative;border-radius:1px}
 .ms-rail-fill{position:absolute;top:0;left:0;bottom:0;width:0%;border-radius:1px;
   background:linear-gradient(90deg,var(--ms-blue),var(--ms-blue-lit) 55%,var(--ms-ivory));
-  box-shadow:0 0 10px rgba(61,150,214,.45)}
+  box-shadow:0 0 10px rgba(125,180,235,.45)}
 .ms-rail-glow{position:absolute;top:-7px;left:0;height:16px;width:0%;border-radius:8px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(13,107,178,.3),rgba(61,150,214,.55),rgba(251,248,242,.4));
+  background:linear-gradient(90deg,rgba(13,107,178,.3),rgba(125,180,235,.55),rgba(251,248,242,.4));
   filter:blur(7px)}
 
 /* Nodes are real buttons — click + keyboard reach every milestone.
@@ -104,7 +109,7 @@
 .ms-nodes{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);
   display:flex;justify-content:space-between;align-items:center}
 .ms-node{width:22px;height:22px;padding:0;border-radius:50%;cursor:pointer;
-  border:2px solid rgba(251,248,242,.3);background:#0A4A82;
+  border:2px solid rgba(251,248,242,.3);background:#004385;
   display:grid;place-items:center;position:relative;
   transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .55s,background .55s,box-shadow .55s}
 .ms-node::after{content:"";width:6px;height:6px;border-radius:50%;
@@ -115,10 +120,13 @@
 .ms-hit{position:absolute;inset:-12px;border-radius:50%}
 .ms-node:hover{border-color:rgba(251,248,242,.5);transform:scale(1.2)}
 .ms-node:focus-visible{outline:2px solid var(--ms-ivory);outline-offset:6px}
-.ms-node.done{border-color:var(--blue-lit);background:var(--blue)}
+/* Was var(--blue-lit)/var(--blue) — neither is defined anywhere in the
+   codebase (only --ms-blue-lit/--ms-blue, scoped to .ms-section, exist),
+   so this rule was silently resolving to transparent the whole time. */
+.ms-node.done{border-color:var(--ms-blue-lit);background:var(--ms-blue)}
 .ms-node.done::after{background:var(--ivory);box-shadow:0 0 6px rgba(251,248,242,.35)}
 .ms-node.active{border-color:var(--ivory);transform:scale(1.55);background:rgba(13,107,178,.45);
-  box-shadow:0 0 22px rgba(13,107,178,.55),0 0 46px rgba(61,150,214,.22)}
+  box-shadow:0 0 22px rgba(13,107,178,.55),0 0 46px rgba(125,180,235,.22)}
 .ms-node.active::before{border-color:rgba(251,248,242,.22);animation:ringPulse 2s ease-out infinite}
 .ms-node.active::after{background:var(--ivory);box-shadow:0 0 14px var(--ivory),0 0 34px rgba(251,248,242,.45)}
 @keyframes ringPulse{0%{transform:scale(1);opacity:1}100%{transform:scale(2.1);opacity:0}}
@@ -160,7 +168,7 @@
 .ms-visual{position:relative;display:grid;place-items:center;overflow:hidden;
   background:
     repeating-radial-gradient(circle at 50% 52%,transparent 0 17px,rgba(251,248,242,.07) 17px 18px),
-    linear-gradient(155deg,#1279c6 0%,var(--ms-blue) 52%,#0a4f8c 100%)}
+    linear-gradient(155deg,#0D6BB2 0%,var(--ms-blue) 52%,#004385 100%)}
 .ms-visual::before{content:"";position:absolute;inset:0;
   background:radial-gradient(ellipse at 44% 40%,rgba(251,248,242,.2),transparent 66%)}
 /* Divider: gradient hairline, brightest at the middle */
@@ -183,9 +191,9 @@
 .ms-tag::after{content:"";flex:1;height:1px;
   background:linear-gradient(90deg,rgba(13,107,178,.4),transparent)}
 .ms-title{font-family:var(--roman);font-size:clamp(25px,2.9vw,39px);font-weight:700;
-  letter-spacing:.02em;line-height:1.06;margin-bottom:14px;color:#08375F}
+  letter-spacing:.02em;line-height:1.06;margin-bottom:14px;color:#004385}
 .ms-desc{font-family:var(--serif);font-size:clamp(15.5px,1.5vw,18px);line-height:1.66;
-  color:#14456F;margin-bottom:0;max-width:60ch;text-wrap:pretty}
+  color:#004385;margin-bottom:0;max-width:60ch;text-wrap:pretty}
 
 /* --- Per-milestone metric strip -------------------------------------------
    Real figures from DATA. Numerals wear the sans (proportional), never the
@@ -194,15 +202,15 @@
 .ms-stats{display:flex;gap:0;flex-wrap:wrap;align-items:flex-start}
 /* When stats follow a bar, they need their own air + a separating hairline */
 .ms-stats-after-bar{margin-top:20px;padding-top:20px;
-  border-top:1px solid rgba(8,55,95,.14)}
-.ms-stats div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(8,55,95,.16)}
+  border-top:1px solid rgba(10,90,148,.14)}
+.ms-stats div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(10,90,148,.16)}
 .ms-stats div:last-child{border-right:none;margin-right:0;padding-right:0}
 /* Figures wear the sans, proportional — a display serif on a data figure
    reads as decoration, and tabular-nums makes big numbers look loose. */
 .ms-stats .sv{font-family:var(--sans);font-size:clamp(24px,2.4vw,30px);font-weight:500;
-  color:#08375F;line-height:1;letter-spacing:-.01em}
+  color:#004385;line-height:1;letter-spacing:-.01em}
 .ms-stats .sk{font-family:var(--roman);font-size:8px;letter-spacing:.26em;text-transform:uppercase;
-  color:rgba(8,55,95,.62);margin-top:9px;white-space:nowrap}
+  color:rgba(10,90,148,.62);margin-top:9px;white-space:nowrap}
 
 /* Stacked bar: 2 series, 2px surface gap, both direct-labelled + legend,
    so identity never rides on hue alone. Inset track gives it a groove. */
@@ -216,19 +224,19 @@
 .ms-bar i{display:block;height:100%;border-radius:4px;flex:0 0 0%;
   transition:flex-basis 1.05s cubic-bezier(.2,.85,.25,1)}
 .ms-card.visible .ms-bar i{flex-basis:var(--w)}
-.ms-bar .c{background:linear-gradient(90deg,#1a86d2,var(--ms-cleared))}
-.ms-bar .b{background:linear-gradient(90deg,#0a4479,var(--ms-blocked))}
+.ms-bar .c{background:linear-gradient(90deg,#0D6BB2,var(--ms-cleared))}
+.ms-bar .b{background:linear-gradient(90deg,#004385,var(--ms-blocked))}
 /* On the ivory sheet the seam shows the ivory card through it */
 .ms-legend{display:flex;gap:24px;flex-wrap:wrap}
 .ms-legend span{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);
-  font-size:11.5px;color:rgba(8,55,95,.78);letter-spacing:.03em}
+  font-size:11.5px;color:rgba(10,90,148,.78);letter-spacing:.03em}
 .ms-legend i{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
 /* Two steps of ONE hue can't carry identity on colour alone, so each swatch
    also differs in form: the deep step gets an ivory ring. With the direct
    labels beside them that's two secondary channels, not just lightness. */
 .ms-legend .sw-c{background:var(--ms-cleared)}
 .ms-legend .sw-b{background:var(--ms-blocked);box-shadow:0 0 0 1px rgba(251,248,242,.9)}
-.ms-legend b{color:#08375F;font-weight:700;font-variant-numeric:tabular-nums;font-size:12.5px}
+.ms-legend b{color:#004385;font-weight:700;font-variant-numeric:tabular-nums;font-size:12.5px}
 
 /* Footer row: date + optional flag */
 .ms-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:24px}
@@ -237,7 +245,8 @@
   padding:10px 16px;border:1px solid rgba(13,107,178,.32);border-radius:5px;
   background:rgba(13,107,178,.07);width:fit-content}
 .ms-date-badge::before{content:"";width:5px;height:5px;border-radius:50%;
-  background:var(--blue-lit);box-shadow:0 0 9px var(--blue-lit),0 0 18px rgba(61,150,214,.5)}
+  /* Same undefined-var bug as .ms-node.done above — fixed the same way. */
+  background:var(--ms-blue-lit);box-shadow:0 0 9px var(--ms-blue-lit),0 0 18px rgba(125,180,235,.5)}
 /* Status flag ships icon + label — never colour alone */
 .ms-flag{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:11.5px;
   font-weight:600;color:var(--ms-ivory);padding:9px 15px;border-radius:5px;letter-spacing:.01em;
@@ -260,7 +269,7 @@
 
 /* --- Particles (single definition — the old duplicate block is gone) --- */
 .ms-particles{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
-.ms-p{position:absolute;border-radius:50%;background:rgba(61,150,214,.7);opacity:0;
+.ms-p{position:absolute;border-radius:50%;background:rgba(125,180,235,.7);opacity:0;
   animation:floatUp var(--dur) var(--delay) infinite ease-out}
 @keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0)}15%{opacity:var(--peak)}
   85%{opacity:var(--peak)}100%{opacity:0;transform:translateY(var(--drift)) scale(0)}}

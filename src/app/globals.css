@@ -5,23 +5,23 @@
 :root {
   /* ========================================
      OmShakthy — Ultra Luxury Theme
-     Primary: Pantone 2935 C (#0499de)
+     Primary: Pantone 2935 C (#0D6BB2)
      Elevated through depth, gradients & gold
      ======================================== */
 
   /* Primary brand blue spectrum */
-  --brand: #0499de;
-  --brand-deep: #037ab8;
-  --brand-dark: #037ab8;
-  --brand-darker: #025f8a;
-  --brand-midnight: #013d57;
+  --brand: #0D6BB2;
+  --brand-deep: #0D6BB2;
+  --brand-dark: #0D6BB2;
+  --brand-darker: #004385;
+  --brand-midnight: #004385;
 
   /* Luxury gradient stops */
-  --gradient-hero: linear-gradient(135deg, #025f8a 0%, #0499de 50%, #037ab8 100%);
-  --gradient-card: linear-gradient(160deg, rgba(4, 153, 222, 0.08) 0%, rgba(201, 162, 39, 0.04) 100%);
+  --gradient-hero: linear-gradient(135deg, #004385 0%, #0D6BB2 50%, #0D6BB2 100%);
+  --gradient-card: linear-gradient(160deg, rgba(13, 107, 178, 0.08) 0%, rgba(201, 162, 39, 0.04) 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,248,245,0.85) 100%);
-  --gradient-dark-section: linear-gradient(180deg, #013d57 0%, #037ab8 100%);
-  --gradient-blue-gold: linear-gradient(135deg, #0499de 0%, #037ab8 60%, #C9A227 100%);
+  --gradient-dark-section: linear-gradient(180deg, #004385 0%, #0D6BB2 100%);
+  --gradient-blue-gold: linear-gradient(135deg, #0D6BB2 0%, #0D6BB2 60%, #C9A227 100%);
 
   /* Neutrals */
   --white: #FFFFFF;
@@ -29,7 +29,7 @@
   --charcoal: #1E293B;
   --slate: #64748B;
   --border: #E5E7EB;
-  --border-blue: rgba(4, 153, 222, 0.15);
+  --border-blue: rgba(13, 107, 178, 0.15);
 
   /* Accent — Champagne Gold */
   --gold: #C9A227;
@@ -37,12 +37,12 @@
   --gold-dark: #A6851E;
 
   /* Omshakthy Blue for logo */
-  --omshakthy-blue: #0499de;
+  --omshakthy-blue: #0D6BB2;
 
   /* Shadows — blue-tinted for luxury depth */
-  --shadow-sm: 0 2px 8px rgba(4, 153, 222, 0.08);
-  --shadow-md: 0 4px 24px rgba(4, 153, 222, 0.12);
-  --shadow-lg: 0 12px 48px rgba(4, 153, 222, 0.18);
+  --shadow-sm: 0 2px 8px rgba(13, 107, 178, 0.08);
+  --shadow-md: 0 4px 24px rgba(13, 107, 178, 0.12);
+  --shadow-lg: 0 12px 48px rgba(13, 107, 178, 0.18);
   --shadow-gold: 0 4px 20px rgba(201, 162, 39, 0.15);
 
   /* ========================================================================
@@ -60,15 +60,20 @@
   /* Secondary & accents */
   --os-brass: #C8A15A;
   --os-cream: #F4EFE6;       /* Warm Cream */
-  --os-mist: #8DB4D1;        /* Mist Blue  */
+  --os-mist: #7DB4EB;        /* Mist Blue — was #8DB4D1, remapped to the "light" tier of the 3-blue system */
 
   /* Status only — approval / caution. Never decoration. */
   --os-field-green: #2D6A3F;
   --os-signal-red: #B13A3A;
 
   /* Derived tints & shades, for gradient construction only */
-  --os-blue-lift: #17549B;
-  --os-blue-deep: #0B2C4E;
+  /* --os-blue-lift and --os-blue-deep both land on the same "deep" tier
+     (#004385) below — they used to be two distinct dark-blue shades for
+     gradient construction, but the 3-blue system only has one deep tier.
+     --os-ink-deep/--os-ink-lift are untouched — those are the ink family,
+     not accent blue. */
+  --os-blue-lift: #004385;
+  --os-blue-deep: #004385;
   --os-ink-deep: #081729;
   --os-ink-lift: #12325A;
   --os-brass-lift: #D9B570;
@@ -248,7 +253,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Blue tint overlay for images */
 .overlay-blue {
-  background: linear-gradient(to top, rgba(1, 61, 87, 0.85) 0%, rgba(4, 153, 222, 0.3) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(10, 90, 148, 0.85) 0%, rgba(13, 107, 178, 0.3) 50%, transparent 100%);
 }
 
 /* Custom scrollbar — blue luxury */
@@ -268,6 +273,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Selection color */
 ::selection {
-  background: rgba(4, 153, 222, 0.2);
+  background: rgba(13, 107, 178, 0.2);
   color: var(--charcoal);
 }

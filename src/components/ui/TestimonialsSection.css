@@ -300,7 +300,7 @@
    gets the most emphatic hover feedback on the tile. */
 .tw-tile:hover .tw-tile-play {
   transform: scale(1.15);
-  background: #0a5a94;
+  background: #004385;
 }
 .tw-tile-play svg {
   margin-left: 1px; /* optical centering — the play triangle isn't symmetric */

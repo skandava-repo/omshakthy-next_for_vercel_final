@@ -6,7 +6,6 @@ import PropertyGrid from '@/components/ui/PropertyGrid'
 import CinematicTimeline from '@/components/ui/CinematicTimeline'
 import MilestoneSection from '@/components/ui/MilestoneSection'
 import LeadersSection from '@/components/ui/LeadersSection'
-import PriceTrends from '@/components/ui/PriceTrends'
 import TestimonialsSection from '@/components/ui/TestimonialsSection'
 import TrustedPartnersSection from '@/components/ui/TrustedPartnersSection'
 import FinancialPartnersSection from '@/components/ui/FinancialPartnersSection'
@@ -43,7 +42,6 @@ export default function HomeClient() {
           <PropertyGrid />
           <CinematicTimeline />
           <LeadersSection />
-          <PriceTrends />
           <TestimonialsSection />
           <TrustedPartnersSection />
         </PageController>

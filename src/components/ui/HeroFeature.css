@@ -26,7 +26,7 @@
   /* Section ground — matched to the PriceTrends (.mp) section so the two
      adjacent slides read as one system.
      Source: PriceTrends.css line 14. */
-  --xf-ground: radial-gradient(130% 120% at 20% 0%, #143459 0%, #009bdffa 45%, #ffffff 100%);
+  --xf-ground: radial-gradient(130% 120% at 20% 0%, #004385 0%, #0D6BB2fa 45%, #ffffff 100%);
 
   /* Card at rest — three stacked layers so the blue has depth rather than
      reading as one flat fill:

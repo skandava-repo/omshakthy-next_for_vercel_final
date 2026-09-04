@@ -87,7 +87,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.2em;
-  color: #C9A227;
+  color: #0D6BB2;
   padding: 6px 16px;
   background: rgba(165, 107, 61, 0.08);
   border-radius: 20px;
@@ -98,7 +98,7 @@
   font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(28px, 3.5vw, 44px);
   font-weight: 400;
-  color: #025f8a;
+  color: #004385;
   line-height: 1.2;
   margin-bottom: 16px;
 }
@@ -122,7 +122,7 @@
   font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(40px, 5vw, 64px);
   font-weight: 400;
-  color: #C9A227;
+  color: #004385;
   line-height: 1;
 }
 
@@ -166,7 +166,7 @@
   font-family: 'Fraunces', Georgia, serif;
   font-size: 64px;
   line-height: 0.9;
-  color: #025f8a;
+  color: #004385;
   letter-spacing: 0.02em;
   display: inline-block;
   animation: yearRise 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -183,7 +183,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #C9A227;
+  color: #0D6BB2;
   margin-top: 8px;
 }
 
@@ -213,7 +213,7 @@
   position: absolute;
   inset: 0;
   border-radius: 4px;
-  background: linear-gradient(90deg, #025f8a, #0499de);
+  background: linear-gradient(90deg, #004385, #0D6BB2);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
@@ -229,7 +229,7 @@
 
 .ct-seg--active .ct-seg__fill {
   transform: scaleX(1);
-  box-shadow: 0 0 16px rgba(4, 153, 222, 0.5);
+  box-shadow: 0 0 16px rgba(13, 107, 178, 0.5);
   animation: segPulse 2s ease-in-out infinite;
 }
 
@@ -246,17 +246,24 @@
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: rgba(30, 35, 45, 0.3);
+  color: #0D6BB2;
   transition: color 0.4s ease;
 }
 
+/* Left as gold (#C9A227), not blue, per explicit instruction — the active
+   segment's year is the one exception to this file's blue pass. */
 .ct-seg--active .ct-seg__year {
   color: #C9A227;
   font-weight: 700;
 }
 
+/* Was rgba(165,107,61,0.5) — a brownish-gold leftover from before this
+   file's blue pass, so moving off a segment (e.g. 1991 -> 1993) left the
+   just-vacated year in a gold-family tone instead of actually reverting
+   to blue. Matches .ct-seg__year's own base color exactly, so gold
+   really is exclusive to the one currently-active segment. */
 .ct-seg--done .ct-seg__year {
-  color: rgba(165, 107, 61, 0.5);
+  color: #0D6BB2;
 }
 
 /* ---- Counter ---- */
@@ -271,7 +278,7 @@
 .ct-bar__counter-current {
   font-family: 'Fraunces', Georgia, serif;
   font-size: 28px;
-  color: #C9A227;
+  color: #0D6BB2;
   line-height: 1;
 }
 

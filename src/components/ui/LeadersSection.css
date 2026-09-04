@@ -283,7 +283,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--os-blue, #0D6BB2) 0%, var(--os-blue-deep, #0B2C4E) 100%);
+  background: linear-gradient(160deg, var(--os-blue, #0D6BB2) 0%, var(--os-blue-deep, #004385) 100%);
 }
 .ld3__photo-placeholder span {
   font-family: 'Fraunces', Georgia, serif;

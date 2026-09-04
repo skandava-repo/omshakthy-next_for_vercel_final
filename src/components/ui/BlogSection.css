@@ -11,7 +11,7 @@
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 5vh, 4rem) clamp(1.5rem, 6vw, 6rem);
-  background: radial-gradient(130% 120% at 20% 0%, #143459 0%, #009bdffa 45%, #ffffff 100%);
+  background: radial-gradient(130% 120% at 20% 0%, #004385 0%, #0D6BB2fa 45%, #ffffff 100%);
   color: #fff;
   font-family: 'Inter', sans-serif;
 }

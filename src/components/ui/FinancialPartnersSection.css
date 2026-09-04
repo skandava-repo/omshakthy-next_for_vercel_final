@@ -14,7 +14,14 @@
   background: var(--fp-paper);
   color: var(--fp-ink);
   font-family: 'Inter', sans-serif;
-  padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 6vw, 6rem);
+  /* Bottom trimmed separately from top — this section sits directly
+     above SpotlightSection with zero margin between the two section
+     boxes, but SpotlightSection's own top padding/centering already
+     adds real space above its content, so this side didn't need to
+     match the top's full clamp(3rem,8vh,5rem) too (measured ~200px of
+     combined empty space between the two sections' actual content
+     before this). */
+  padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 6vw, 6rem) clamp(1.25rem, 3vh, 2rem);
 }
 
 .fp__inner {

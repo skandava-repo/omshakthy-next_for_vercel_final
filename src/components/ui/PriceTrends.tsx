@@ -71,6 +71,24 @@ export const blogs = [
       'From community drives to milestone celebrations — a look at the people, culture and moments that shape life across Omshakthy.',
     image: '/blog/b3.jpg',
   },
+  {
+    date: 'Mar 12, 2025',
+    cat: 'Market',
+    read: '5 min read',
+    title: 'Inside OmShakthy Regalia: A Gated Community Taking Shape in Avadi',
+    excerpt:
+      'DTCP-approved layouts, blacktop roads and clear titles — a look at how Regalia is shaping up as one of Avadi’s ongoing gated-community developments.',
+    image: '/regalia.png',
+  },
+  {
+    date: 'May 6, 2025',
+    cat: 'Latest Buzz',
+    read: '5 min read',
+    title: 'Documents to Check Before You Buy a Plot in Chennai',
+    excerpt:
+      'Patta, EC, DTCP approval and RERA registration — the paperwork checklist every buyer should verify before signing on a residential plot.',
+    image: '/wc/wc-land.jpg',
+  },
 ]
 
 const W = 800

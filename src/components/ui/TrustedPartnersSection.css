@@ -10,8 +10,16 @@
    ============================================================ */
 
 .tp {
-  --tp-brass: #C9A227;
-  --tp-brass-light: #F0CC6B;
+  --tp-blue: #0D6BB2;
+  --tp-blue-light: #7DB4EB;
+  /* Blue theme (matching TestimonialsSection's #0D6BB2), deepened to
+     #004385 for --tp-blue-deep so it still has real contrast sitting on
+     the background scrim below — the same darkened-for-light-backgrounds
+     pattern every other page on this site uses. --tp-blue-light stays
+     defined above for anything that still sits over the photo itself
+     rather than the background wash. */
+  --tp-blue-deep: #004385;
+  --tp-ink: #0B1F3A;
 
   position: relative;
   height: 100%;
@@ -19,8 +27,12 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  background: #0B1F3A;
-  color: #fff;
+  /* Matches TestimonialsSection's own background exactly (#f4f6f9) —
+     this used to be a warm ivory (#F4EFE6) instead, which shared the
+     blue accent with Testimonials but not the actual page tint, so the
+     two sections still read as different temperatures side by side. */
+  background: #f4f6f9;
+  color: var(--tp-ink);
   font-family: 'Inter', sans-serif;
 }
 
@@ -64,10 +76,12 @@
 .tp__bg-scrim {
   position: absolute;
   inset: 0;
-  /* Left-to-right darkening, not a flat tint — the index list lives on
-     the left, so that's where the photo needs to recede the most; the
-     right side stays more visible as an actual photograph. */
-  background: linear-gradient(100deg, rgba(3, 10, 20, 0.92) 0%, rgba(3, 10, 20, 0.72) 38%, rgba(3, 10, 20, 0.28) 68%, rgba(3, 10, 20, 0.08) 100%);
+  /* Left-to-right wash, not a dark one — same idea as before (the index
+     list lives on the left, so that's where the photo needs to recede
+     the most) but lightening toward the page's own background instead
+     of darkening toward black, so the text over it can go dark ink.
+     Same #f4f6f9 as .tp's own background, not the old ivory #F4EFE6. */
+  background: linear-gradient(100deg, rgba(244, 246, 249, 0.94) 0%, rgba(244, 246, 249, 0.8) 38%, rgba(244, 246, 249, 0.32) 68%, rgba(244, 246, 249, 0.1) 100%);
 }
 
 /* ---- the index itself ---- */
@@ -93,13 +107,13 @@
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--tp-brass-light);
+  color: var(--tp-blue-deep);
   margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
 }
 .tp__index-eyebrow-line {
   width: 48px;
   height: 2px;
-  background: var(--tp-brass-light);
+  background: var(--tp-blue-deep);
   border-radius: 2px;
 }
 
@@ -118,7 +132,7 @@
   padding: clamp(0.6rem, 1.6vh, 1.1rem) 0;
   background: none;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(11, 31, 58, 0.14);
   text-align: left;
   cursor: pointer;
   /* Room for the active row's title to actually grow (see .is-active
@@ -132,7 +146,7 @@
   padding-bottom: clamp(0.9rem, 2.2vh, 1.5rem);
 }
 .tp__index-row:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(11, 31, 58, 0.14);
 }
 
 /* Large outlined/"ghost" numeral, not a small mono counter — the same
@@ -149,11 +163,11 @@
   font-size: clamp(2.4rem, 4.6vw, 4rem);
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.28);
+  -webkit-text-stroke: 1px rgba(11, 31, 58, 0.22);
   transition: -webkit-text-stroke-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .tp__index-row.is-active .tp__index-num {
-  -webkit-text-stroke: 1px rgba(240, 204, 107, 0.75);
+  -webkit-text-stroke: 1px rgba(10, 90, 148, 0.8);
   transform: scale(1.08);
 }
 
@@ -163,20 +177,20 @@
   font-weight: 600;
   font-size: clamp(1.5rem, 3.1vw, 2.6rem);
   line-height: 1.1;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(11, 31, 58, 0.55);
   transform-origin: left center;
   transition: color 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Real scale hierarchy, not just a color/opacity swap — the active
    discipline should read as genuinely more important, not just "less
    dim," which a plain color change doesn't actually deliver. A subtle
-   gold-sheen gradient fill instead of flat white, too — the same
+   ink-to-blue gradient fill instead of flat ink, too — the same
    background-clip:text technique this file's own previous version used
-   on its eyebrow, reused rather than a plain color swap. Mostly white
-   with gold only at the tail end (not a fully gold fill) so it stays
-   easily legible at a glance, just warmer. */
+   on its eyebrow, reused rather than a plain color swap. Mostly ink
+   with blue only at the tail end (not a fully blue fill) so it stays
+   easily legible at a glance, just with a hint of the accent color. */
 .tp__index-row.is-active .tp__index-title {
-  background: linear-gradient(120deg, #fff 0%, #fff 62%, var(--tp-brass-light) 100%);
+  background: linear-gradient(120deg, var(--tp-ink) 0%, var(--tp-ink) 62%, var(--tp-blue-deep) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -188,7 +202,7 @@
   grid-row: 2;
   font-size: clamp(0.85rem, 1vw, 0.98rem);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(11, 31, 58, 0.68);
   max-width: 46ch;
   margin: 0;
   /* Collapsed by default — only the active row's description actually
@@ -220,7 +234,7 @@
   bottom: 0;
   height: 2px;
   width: 0%;
-  background: var(--tp-brass-light);
+  background: var(--tp-blue-deep);
   animation-name: tpIndexProgress;
   animation-timing-function: linear;
 }

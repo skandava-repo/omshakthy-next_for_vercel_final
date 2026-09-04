@@ -18,7 +18,17 @@
   height: 100vh;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  /* Was center — with a fixed 100vh box and content shorter than that,
+     centering split the leftover space evenly above and below, putting
+     ~106px of pure empty slack between this section's own top edge and
+     its content (on top of FinancialPartnersSection's own bottom
+     padding right above it) — that's what read as "a large gap"
+     between the two sections. flex-start plus .sl__inner's own existing
+     top padding keeps a small intentional gap instead of an accidental
+     large one; the leftover space now collects below the grid instead,
+     which isn't visible as a "gap between sections" the way top slack
+     was. */
+  align-items: flex-start;
   background: var(--sl-paper);
   color: var(--sl-ink);
   font-family: 'Inter', sans-serif;
@@ -86,14 +96,23 @@
     'events gallery buzz'
     'newsletter newsletter newsletter';
   gap: 1rem;
-  height: clamp(380px, 50vh, 500px);
+  /* Grown alongside .sl__tile--newsletter below so the newsletter row's
+     extra height doesn't eat into the events/gallery/awards/buzz rows,
+     which would otherwise shrink to keep this container's total height
+     fixed. .sl vertically centers .sl__inner within its 100vh, which is
+     also the source of the large FP/SL gap fixed in FinancialPartners
+     Section.css — growing this container reduces that centering slack
+     as a side effect, on top of the direct fix there. */
+  height: clamp(460px, 58vh, 590px);
 }
 
 .sl__tile--events { grid-area: events; }
 .sl__tile--gallery { grid-area: gallery; }
 .sl__tile--awards { grid-area: awards; }
 .sl__tile--buzz { grid-area: buzz; }
-.sl__tile--newsletter { grid-area: newsletter; height: clamp(70px, 10vh, 90px); }
+/* First pass (clamp(70,10vh,90) → clamp(110,14vh,150)) fixed unreadable
+   text; this is a further +30% on top of that per direct request. */
+.sl__tile--newsletter { grid-area: newsletter; height: clamp(140px, 18vh, 195px); }
 
 .sl__tile {
   position: relative;
@@ -194,7 +213,7 @@
   }
 
   .sl__tile--newsletter {
-    height: clamp(70px, 12vh, 90px);
+    height: clamp(130px, 18vh, 170px);
   }
 }
 

@@ -1,0 +1,739 @@
+/* ============================================================
+   BlogListingContent — clones the "PaperMag News" reference's layout
+   (masthead, nav, hero+sidebar, tabbed grid), sized to this site's 3
+   real blog posts. See the .tsx's own comment on why the extra slots
+   the reference has aren't padded with invented posts.
+   ============================================================ */
+
+.bp {
+  --bp-ink: #0B1F3A;
+  --bp-ink-muted: rgba(11, 31, 58, 0.62);
+  --bp-line: rgba(11, 31, 58, 0.14);
+  /* Blue theme matching TestimonialsSection/TrustedPartnersSection
+     (#0D6BB2), deepened to #004385 as the primary accent for contrast on
+     this page's own cream background — the same "deepen for light
+     backgrounds" pattern already used there, not a new invention. The
+     brighter #0D6BB2 stays as the lighter/hover step. */
+  --bp-blue: #004385;
+  --bp-blue-light: #0D6BB2;
+
+  position: relative;
+  min-height: 100vh;
+  background: #FBF8F2;
+  color: var(--bp-ink);
+  font-family: 'Inter', sans-serif;
+  padding: calc(102px + 2rem) clamp(1.25rem, 5vw, 4rem) clamp(4rem, 8vh, 6rem);
+}
+
+/* ---------------- masthead ---------------- */
+.bp__masthead {
+  max-width: 1280px;
+  margin: 0 auto clamp(2.5rem, 6vh, 4rem);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--bp-line);
+}
+.bp__masthead-meta {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--bp-ink-muted);
+  display: flex;
+  align-items: center;
+  padding-top: 0.4rem;
+  flex: none;
+}
+.bp__masthead-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--bp-ink-muted);
+  margin: 0 0.6rem;
+}
+.bp__masthead-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+.bp__masthead-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+}
+.bp__masthead-mail {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bp-blue);
+  padding-top: 0.4rem;
+  flex: none;
+}
+.bp__masthead-mail:hover {
+  color: var(--bp-blue-light);
+}
+
+/* ---------------- shared bits ---------------- */
+.bp__cat {
+  display: inline-block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bp-blue);
+  margin-bottom: 0.6rem;
+}
+/* Real frosted glass, not a flat white chip — same backdrop-filter/
+   border/inset-highlight language as the site's own glass cards
+   (see HeroFeature.css) instead of a plain solid pill, so the badge
+   reads as sitting *in front of* the photo rather than pasted over it. */
+.bp__cat--on-photo {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 2;
+  margin: 0;
+  padding: 0.3rem 0.65rem;
+  background: rgba(251, 248, 242, 0.35);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border: 1px solid rgba(251, 248, 242, 0.4);
+  border-radius: 3px;
+  color: #FBF8F2;
+  box-shadow: inset 0 1px 0 rgba(251, 248, 242, 0.35);
+}
+.bp__byline {
+  display: block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.68rem;
+  color: var(--bp-ink-muted);
+}
+
+/* Reference has a named reporter with a headshot; this site's posts
+   don't have individual bylined authors, so this is the real company
+   mark + "OmShakthy Team" rather than an invented person. */
+.bp__author {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+.bp__author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  background: var(--bp-ink);
+}
+.bp__author-text {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--bp-ink);
+}
+.bp__author-text small {
+  display: block;
+  margin-top: 0.15rem;
+  font-weight: 400;
+  color: var(--bp-ink-muted);
+}
+.bp__author--on-photo .bp__author-text {
+  color: #FBF8F2;
+}
+.bp__author--on-photo .bp__author-text small {
+  color: rgba(251, 248, 242, 0.7);
+}
+
+/* ---------------- hero ---------------- */
+.bp__hero {
+  max-width: 1280px;
+  margin: 0 auto clamp(3rem, 7vh, 5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  /* The right column (photo card + corridor link + quote block) is
+     naturally taller than the left column's text content — the grid row
+     always sizes to that taller column no matter what align-items does
+     on the shorter one, so the fix isn't in alignment. Left as default
+     stretch so .bp__hero-main's own box actually grows to the full row
+     height; the photo (below, height:100%) fills that height instead of
+     leaving it blank. */
+}
+
+/* The photo pins into the top-right corner and the text column is
+   deliberately narrower than the full width, so the two read as
+   overlapping/sitting-behind rather than a plain 50/50 split — closer
+   to how the reference's headline wraps around its courtroom photo. */
+.bp__hero-main {
+  position: relative;
+  display: block;
+  min-height: 300px;
+  text-decoration: none;
+  color: inherit;
+}
+.bp__hero-body {
+  position: relative;
+  /* Above both the photo (z-index 0) and its fade overlay (z-index 1). */
+  z-index: 2;
+  /* Narrow, like the reference's own text column — this is what lets
+     the photo run the full height beside it without crowding the text,
+     and what makes the headline's overlap onto the photo read as
+     intentional rather than a layout collision. */
+  max-width: 50%;
+}
+/* Runs the full height of .bp__hero-main (which is now correctly sized
+   to match the sidebar, so this no longer produces the oversized/
+   distorted stretch an earlier attempt did) and starts further left
+   than the text column ends, so the two genuinely overlap — matching
+   the reference's tall courtroom photo sitting behind the headline. */
+.bp__hero-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 59%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 16px 32px rgba(11, 31, 58, 0.18);
+}
+/* Sits above the photo, below the text (z-index 1, between the image's
+   0 and the body's 2 below) — fades the photo's left edge into the
+   page's own cream so the overlap zone reads as the photo softly
+   receding, not a hard seam. Matches the image's own box in width/
+   position so the fade only ever touches the photo, never the empty
+   cream to its right. */
+.bp__hero-shade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 59%;
+  background: linear-gradient(
+    90deg,
+    #FBF8F2 0%,
+    rgba(251, 248, 242, 0.82) 10%,
+    rgba(251, 248, 242, 0.35) 24%,
+    rgba(251, 248, 242, 0) 42%
+  );
+  pointer-events: none;
+}
+.bp__hero-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  line-height: 1.35;
+  margin: 0 0 0.8rem;
+}
+/* Solid backing behind the headline text itself, not the whole <h1>
+   box — box-decoration-break:clone gives each wrapped line its own
+   boxed background (matching the reference) instead of one rectangle
+   spanning the full block, which is what a background on the h1 itself
+   would produce. */
+.bp__hero-title-text {
+  background: #FBF8F2;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.08em 0.32em;
+}
+.bp__hero-excerpt {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--bp-ink-muted);
+  margin: 0 0 1rem;
+}
+.bp__dropcap {
+  float: left;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 2.8em;
+  line-height: 0.8;
+  margin: 0.02em 0.08em 0 0;
+  color: var(--bp-blue);
+}
+
+.bp__side {
+  display: flex;
+  flex-direction: column;
+  /* Reference's sidebar stack is compact — a small photo card plus a
+     tight quote box — which is what keeps it roughly level with the
+     hero column instead of running past it. Tightened from a much
+     wider gap that was making this column taller than the hero. */
+  gap: clamp(0.9rem, 1.8vh, 1.2rem);
+}
+/* Badge, headline AND byline all overlaid on the photo's own scrim —
+   matching the reference's sidebar card, which overlays all three
+   rather than putting the title in a separate area below the photo. */
+.bp__side-card {
+  position: relative;
+  display: block;
+  min-height: 150px;
+  border-radius: 3px;
+  overflow: hidden;
+  text-decoration: none;
+  color: #FBF8F2;
+  transition: box-shadow 0.4s ease;
+}
+.bp__side-card:hover {
+  box-shadow: 0 12px 28px rgba(11, 31, 58, 0.24);
+}
+.bp__side-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__side-card:hover .bp__side-img {
+  transform: scale(1.06);
+}
+.bp__side-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(11, 31, 58, 0.9) 0%, rgba(11, 31, 58, 0.4) 50%, rgba(11, 31, 58, 0.05) 80%);
+}
+.bp__side-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 1.1rem;
+}
+.bp__side-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.2;
+  color: #FBF8F2;
+  margin: 0 0 0.4rem;
+}
+
+/* Real project link on posts that are actually about a corridor
+   OmShakthy sells in — the journal connected to the business, not a
+   bolted-on WordPress afterthought. */
+.bp__corridor {
+  display: inline-block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--bp-blue);
+  margin-top: 0.5rem;
+}
+.bp__corridor:hover {
+  color: var(--bp-blue-light);
+}
+.bp__corridor-arrow {
+  display: inline-block;
+  margin-left: 0.15em;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__corridor:hover .bp__corridor-arrow {
+  transform: translateX(0.3em);
+}
+
+.bp__quote {
+  margin: 0;
+  padding: clamp(0.9rem, 1.8vw, 1.2rem);
+  background: rgba(200, 161, 90, 0.08);
+  border-left: 2px solid var(--bp-blue);
+}
+.bp__quote blockquote {
+  margin: 0 0 0.7rem;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(0.85rem, 1.2vw, 0.98rem);
+  line-height: 1.4;
+  color: var(--bp-ink);
+}
+.bp__quote figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--bp-ink-muted);
+}
+.bp__quote figcaption img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+.bp__quote figcaption span {
+  font-weight: 600;
+  color: var(--bp-ink);
+}
+.bp__quote figcaption small {
+  font-weight: 400;
+  color: var(--bp-ink-muted);
+}
+
+/* ---------------- recently added ---------------- */
+.bp__recent {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.bp__recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 3vh, 2.2rem);
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bp-line);
+}
+.bp__recent-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  margin: 0;
+}
+.bp__recent-tabs {
+  display: flex;
+  gap: 1.2rem;
+}
+/* The pill (.bp__tab-pill, a shared framer-motion layoutId element) sits
+   behind the label and slides between buttons on filter change instead
+   of the old flat color-only swap — position:relative + z-index puts the
+   label above it. */
+.bp__tab {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.85rem;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bp-ink-muted);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.bp__tab-label {
+  position: relative;
+  z-index: 1;
+}
+.bp__tab-pill {
+  position: absolute;
+  inset: 0;
+  background: var(--bp-ink);
+  border-radius: 999px;
+  z-index: 0;
+}
+.bp__tab.is-active {
+  color: #FBF8F2;
+}
+.bp__tab:not(.is-active):hover {
+  color: var(--bp-ink);
+}
+
+/* Asymmetric — one big overlaid-caption feature card, plus a stack of
+   smaller photo-top/text-below cards beside it. Matches the reference's
+   actual "Recently Added" layout, not a uniform equal-size grid. */
+.bp__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.2rem);
+  align-items: stretch;
+}
+
+.bp__feature {
+  min-height: 320px;
+}
+.bp__feature-link {
+  position: relative;
+  display: block;
+  height: 100%;
+  min-height: 320px;
+  border-radius: 4px;
+  overflow: hidden;
+  text-decoration: none;
+  color: #FBF8F2;
+  transition: box-shadow 0.4s ease;
+}
+.bp__feature-link:hover {
+  box-shadow: 0 16px 36px rgba(11, 31, 58, 0.28);
+}
+.bp__feature-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__feature-link:hover .bp__feature-img {
+  transform: scale(1.06);
+}
+.bp__feature-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(11, 31, 58, 0.92) 0%, rgba(11, 31, 58, 0.45) 45%, rgba(11, 31, 58, 0.05) 75%);
+}
+.bp__feature .bp__cat--on-photo {
+  top: 1rem;
+  left: 1rem;
+}
+.bp__feature-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: clamp(1.2rem, 2.4vw, 1.8rem);
+}
+.bp__feature-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  line-height: 1.2;
+  color: #FBF8F2;
+  margin: 0 0 0.5rem;
+}
+.bp__byline--on-photo {
+  color: rgba(251, 248, 242, 0.75);
+}
+
+/* 2 columns, photo-top/text-below — the reference's small cards never
+   go photo-left/text-right, which is what this used to be. */
+.bp__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.3rem, 2.6vw, 1.8rem);
+  align-content: start;
+}
+.bp__card {
+  display: block;
+}
+.bp__card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.bp__card-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 0.8rem;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__card-link:hover .bp__card-img {
+  transform: scale(1.04);
+}
+.bp__card-body {
+  min-width: 0;
+}
+.bp__card-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.25;
+  margin: 0 0 0.4rem;
+  transition: color 0.3s ease;
+}
+.bp__card-link:hover .bp__card-title {
+  color: var(--bp-blue);
+}
+
+/* ---------------- mixed: text list + banner ---------------- */
+.bp__mixed {
+  max-width: 1280px;
+  margin: clamp(3rem, 7vh, 5rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.bp__mixed-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.8rem, 3.6vh, 2.4rem);
+}
+/* Text-first, thumbnail beside it — the reference varies this on
+   purpose (list items go text+small-photo, the grid cards above go
+   photo-then-text) rather than using one card shape everywhere. */
+.bp__mini {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+.bp__mini-body {
+  flex: 1;
+  min-width: 0;
+}
+.bp__mini-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.25;
+  margin: 0 0 0.4rem;
+  transition: color 0.3s ease;
+}
+.bp__mini:hover .bp__mini-title {
+  color: var(--bp-blue);
+}
+.bp__mini-excerpt {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--bp-ink-muted);
+  margin: 0 0 0.5rem;
+}
+.bp__mini-img {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex: none;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__mini:hover .bp__mini-img {
+  transform: scale(1.08);
+}
+
+/* Headline sits above the photo as plain dark text here, not overlaid
+   — the one place in the reference that doesn't use the scrim
+   treatment, for rhythm. */
+.bp__banner {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.bp__banner-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  line-height: 1.25;
+  margin: 0 0 1rem;
+  transition: color 0.3s ease;
+}
+.bp__banner:hover .bp__banner-title {
+  color: var(--bp-blue);
+}
+.bp__banner-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 3px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__banner:hover .bp__banner-img {
+  transform: scale(1.03);
+}
+
+/* ---------------- bottom recap strip ---------------- */
+.bp__strip {
+  max-width: 1280px;
+  margin: clamp(3rem, 6vh, 4rem) auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.2rem;
+  padding-top: clamp(1.3rem, 2.6vh, 1.8rem);
+  border-top: 1px solid var(--bp-line);
+}
+.bp__strip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1 1 200px;
+  text-decoration: none;
+  color: inherit;
+}
+.bp__strip-img {
+  width: 46px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bp__strip-item:hover .bp__strip-img {
+  transform: scale(1.12);
+}
+.bp__strip-title {
+  display: block;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 0.86rem;
+  line-height: 1.25;
+  margin-top: 0.2rem;
+  transition: color 0.3s ease;
+}
+.bp__strip-item:hover .bp__strip-title {
+  color: var(--bp-blue);
+}
+
+/* Owns the small library honestly instead of padding the page to look
+   like a busier newsroom than it is. */
+.bp__note {
+  max-width: 52ch;
+  margin: clamp(3rem, 6vh, 4rem) auto 0;
+  padding-top: clamp(1.5rem, 3vh, 2rem);
+  border-top: 1px solid var(--bp-line);
+  text-align: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--bp-ink-muted);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px) {
+  .bp__hero {
+    grid-template-columns: 1fr;
+  }
+  /* The pinned-photo/narrow-text composition needs real width to read
+     as "overlapping" rather than "cramped" — stack normally instead
+     below this breakpoint. */
+  .bp__hero-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .bp__hero-body {
+    max-width: 100%;
+  }
+  .bp__hero-img {
+    position: static;
+    width: 100%;
+  }
+  .bp__masthead {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .bp__masthead-center {
+    order: 3;
+    flex-basis: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .bp__grid {
+    grid-template-columns: 1fr;
+  }
+  .bp__list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bp__mixed {
+    grid-template-columns: 1fr;
+  }
+}

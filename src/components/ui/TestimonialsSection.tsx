@@ -19,10 +19,17 @@ interface Review {
 // Content sourced from the Figma "Customer Stories" section.
 // NOTE: `photo` images in /public/testimonials are royalty-free placeholders
 // (randomuser.me). Swap them for real customer / licensed Indian portraits.
+// PLACEHOLDER PASS: every quote below has had a clearly-marked dummy
+// second half appended (bracketed note + lorem ipsum) to roughly double
+// its length, at the user's own request, purely to preview how the
+// featured card reads/lays out with longer content — the user is
+// swapping this filler for the real expanded quotes afterwards. Nothing
+// past "[PLACEHOLDER — replace with the rest of the real quote.]" on
+// each entry is an actual customer's words.
 const reviews: Review[] = [
   {
     quote:
-      'Owning a flat in Santha Towers is a symbol of security for my retired life. The team was transparent, on-time and truly cared.',
+      'Owning a flat in Santha Towers is a symbol of security for my retired life. The team was transparent, on-time and truly cared. [PLACEHOLDER — replace with the rest of the real quote.] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.',
     name: 'Jalaja Madanmohan',
     detail: 'B103 – OmShakthy Santha Towers',
     photo: '/testimonials/jalaja.png',
@@ -30,7 +37,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      "They went above and beyond — providing reticulated gas at no extra cost even though it wasn't part of the original agreement. That's OmShakthy.",
+      "They went above and beyond — providing reticulated gas at no extra cost even though it wasn't part of the original agreement. That's OmShakthy. [PLACEHOLDER — replace with the rest of the real quote.] Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
     name: 'D. Dhanasekaran',
     detail: 'OmShakthy Santha Towers',
     photo: '/testimonials/dhanasekaran.png',
@@ -40,7 +47,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      'We invested in Regalia at launch price. In 18 months, the land value has appreciated by over 22%. Best investment of my life.',
+      'We invested in Regalia at launch price. In 18 months, the land value has appreciated by over 22%. Best investment of my life. [PLACEHOLDER — replace with the rest of the real quote.] Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     name: 'Suresh Rajan',
     detail: 'OmShakthy Regalia, Avadi',
     photo: '/testimonials/suresh.png',
@@ -48,7 +55,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      'The construction quality is exceptional. Every detail shows their commitment to excellence and customer satisfaction.',
+      'The construction quality is exceptional. Every detail shows their commitment to excellence and customer satisfaction. [PLACEHOLDER — replace with the rest of the real quote.] Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     name: 'Priya Sharma',
     detail: 'OmShakthy Heights',
     photo: '/testimonials/priya.png',
@@ -58,7 +65,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      'Great location, amazing amenities, and the after-sales service is outstanding. I recommend OmShakthy to all my friends.',
+      'Great location, amazing amenities, and the after-sales service is outstanding. I recommend OmShakthy to all my friends. [PLACEHOLDER — replace with the rest of the real quote.] Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
     name: 'Rajesh Kumar',
     detail: 'OmShakthy Crown',
     photo: '/testimonials/rajesh.png',
@@ -66,7 +73,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      'The best real estate investment I could have made. OmShakthy delivered exactly what they promised.',
+      'The best real estate investment I could have made. OmShakthy delivered exactly what they promised. [PLACEHOLDER — replace with the rest of the real quote.] Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit, sed quia.',
     name: 'Anitha Patel',
     detail: 'OmShakthy Residency',
     photo: '/testimonials/anitha.jpg',
@@ -76,7 +83,7 @@ const reviews: Review[] = [
   },
   {
     quote:
-      'Getting the keys to our first home together was one of the happiest days of our lives. OmShakthy made the entire journey smooth, transparent and stress-free.',
+      'Getting the keys to our first home together was one of the happiest days of our lives. OmShakthy made the entire journey smooth, transparent and stress-free. [PLACEHOLDER — replace with the rest of the real quote.] At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum.',
     name: 'Vikram & Meera Iyer',
     detail: 'OmShakthy Meadows, Guduvancheri',
     photo: '/testimonials/vikram-meera.jpg',

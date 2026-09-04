@@ -1,0 +1,326 @@
+/* ============================================================
+   BlogJourneyContent — /blog2, v2.
+   Rebuilt from scratch after v1 ("The Corridor Drive", a horizontal
+   stop-navigation page) turned out to reuse this site's own
+   CinematicTimeline mechanic under different skin. See the .tsx's own
+   comment for the full reasoning.
+
+   No persistent nav chrome anywhere on this page by design — no route
+   line, no dots, no counters, no tag pills, no glass badges, no
+   gradient scrims. Restraint and big type are doing the work instead,
+   closer to how an Apple product page actually reads.
+   ============================================================ */
+
+.br {
+  --br-ink: #0B1F3A;
+  --br-cream: #FBF8F2;
+  --br-muted: rgba(251, 248, 242, 0.62);
+  --br-blue: #7DB4EB;
+  background: var(--br-ink);
+  color: var(--br-cream);
+}
+
+/* ---------------- hero ---------------- */
+.br__hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  gap: clamp(1.4rem, 3vh, 2rem);
+}
+.br__hero-eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--br-blue);
+}
+.br__hero-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(2.6rem, 7.5vw, 6.2rem);
+  line-height: 1.06;
+  color: var(--br-cream);
+  margin: 0;
+}
+.br__hero-hint {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(251, 248, 242, 0.4);
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+}
+
+/* ---------------- post sections ---------------- */
+.br__post-pin-track {
+  position: relative;
+  height: 220vh;
+}
+.br__post-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Without this, the margin around the centered (never-quite-full-bleed)
+     frame is transparent, so the copy text scrolling up in normal flow
+     behind this sticky element shows straight through it while still
+     pinned — exactly the "text bleeding through the photo" bug this
+     fixes. */
+  background: var(--br-ink);
+  z-index: 1;
+}
+.br__post-frame {
+  position: relative;
+  width: min(78vw, 1100px);
+  height: min(66vh, 640px);
+  overflow: hidden;
+  will-change: transform, border-radius;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.4);
+}
+.br__post-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Sits in normal document flow directly after the tall pinned section —
+   only reachable by scrolling all the way past the pin, which is the
+   point: the photo has to finish its moment before the story appears. */
+.br__post-copy {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(3rem, 10vh, 7rem) 1.5rem clamp(6rem, 16vh, 10rem);
+  text-align: center;
+}
+.br__post-eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--br-blue);
+  margin-bottom: 1.1rem;
+}
+.br__post-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4.6vw, 3.2rem);
+  line-height: 1.12;
+  color: var(--br-cream);
+  margin: 0 0 1.3rem;
+}
+.br__post-excerpt {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--br-muted);
+  max-width: 56ch;
+  margin: 0 auto 1.6rem;
+}
+.br__post-meta {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.76rem;
+  color: rgba(251, 248, 242, 0.45);
+  margin-bottom: 1.8rem;
+}
+.br__post-link {
+  display: inline-block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--br-cream);
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(251, 248, 242, 0.35);
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.br__post-link:hover {
+  color: var(--br-blue);
+  border-color: var(--br-blue);
+  transform: translateY(-2px);
+}
+
+/* ---------------- story list ----------------
+   Everything after the one featured post — compact rows so the page
+   can hold many entries without every one of them costing a 220vh
+   section. Each row's thumbnail is absolutely positioned and hidden
+   until hover, so it adds zero height to the row — the list scans as
+   pure typography by default. */
+.br__list {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vh, 5rem) 1.5rem clamp(4rem, 10vh, 6rem);
+}
+.br__list-eyebrow {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--br-blue);
+  margin-bottom: 0.5rem;
+}
+.br__list-rows {
+  position: relative;
+  border-top: 1px solid rgba(251, 248, 242, 0.14);
+  /* The floating preview is a cursor-tracking overlay, not part of any
+     one row — cursor: none would be heavy-handed, so instead the rows
+     stay fully normal (native pointer, normal link semantics) and the
+     preview is purely an additive visual riding above them. */
+}
+.br__row {
+  position: relative;
+  display: block;
+  padding: clamp(1.4rem, 3vh, 2rem) 0;
+  border-bottom: 1px solid rgba(251, 248, 242, 0.14);
+  text-decoration: none;
+  color: inherit;
+}
+.br__row-meta {
+  display: block;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: rgba(251, 248, 242, 0.45);
+  margin-bottom: 0.5rem;
+}
+.br__row-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  line-height: 1.25;
+  color: var(--br-cream);
+  max-width: 34ch;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+.br__row:hover .br__row-title {
+  color: var(--br-blue);
+}
+
+/* One shared preview, positioned via spring-smoothed motion values tied
+   to the raw cursor position (set in the component) — it isn't part of
+   any row's box, so it never affects row height, and it's what actually
+   carries the list's visual interest instead of a per-row thumbnail. */
+.br__cursor-preview {
+  position: absolute;
+  z-index: 2;
+  width: 180px;
+  height: 120px;
+  margin-left: 1.5rem;
+  margin-top: -60px;
+  border-radius: 6px;
+  overflow: hidden;
+  pointer-events: none;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.25s ease;
+}
+.br__cursor-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------------- outro ---------------- */
+.br__outro {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+.br__outro-quote {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+  line-height: 1.5;
+  color: var(--br-cream);
+  max-width: 46ch;
+  margin: 0 auto 1.2rem;
+}
+.br__outro-attr {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  color: rgba(251, 248, 242, 0.5);
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+.br__outro-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.br__outro-cta {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--br-ink);
+  background: var(--br-cream);
+  padding: 0.9rem 1.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.br__outro-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(251, 248, 242, 0.18);
+}
+.br__outro-secondary {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 0.78rem;
+  color: rgba(251, 248, 242, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.br__outro-secondary:hover {
+  color: var(--br-cream);
+}
+
+/* ---------------- Responsive ----------------
+   The pin/scale effect degrades gracefully on its own at any width —
+   it's driven by scroll fraction, not fixed pixel math — so this is
+   just sizing, not a fallback mode. Section height is shortened since
+   a shorter viewport needs less scroll runway for the same visual
+   effect to read clearly. */
+@media (max-width: 760px) {
+  .br__post-pin-track {
+    height: 170vh;
+  }
+  .br__post-frame {
+    width: 92vw;
+    height: 56vh;
+  }
+  .br__post-copy {
+    padding: 2.5rem 1.25rem clamp(4rem, 12vh, 6rem);
+  }
+  /* No real cursor to track on touch — the preview would either never
+     appear or get stuck wherever the last tap happened, so it's removed
+     entirely rather than shipping a broken version of the effect. */
+  .br__cursor-preview {
+    display: none;
+  }
+  .br__row-title {
+    max-width: none;
+  }
+}

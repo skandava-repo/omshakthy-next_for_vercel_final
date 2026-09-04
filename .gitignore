@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# local backups / scratch copies made during image-compression passes —
+# large binary safety copies, never meant for version control
+/public copy/
+/public/_pre-edit-backup-*/
+*.zip
+
 # debug
 npm-debug.log*
 yarn-debug.log*
