@@ -21,7 +21,7 @@
   padding: clamp(7.5rem, 16vh, 9.5rem) var(--mp-px) clamp(1.5rem, 4vh, 2.5rem);
   /* Brighter, more saturated spread — the old center-to-corner blue read as
      a flat, murky wash at full-viewport size. */
-  background: radial-gradient(140% 130% at 15% -10%, #17a3ea 0%, #0D6BB2 40%, #0a3a63 78%, #062038 100%);
+  background: radial-gradient(140% 130% at 15% -10%, #0D6BB2 0%, #0D6BB2 40%, #004385 78%, #062038 100%);
   color: #f2ede4;
   font-family: 'Inter', sans-serif;
 }
@@ -47,8 +47,8 @@
   pointer-events: none;
   background:
     radial-gradient(42vw 42vw at 6% -10%, rgba(217, 181, 112, 0.28), transparent 70%),
-    radial-gradient(38vw 38vw at 100% 8%, rgba(141, 180, 209, 0.3), transparent 70%),
-    radial-gradient(50vw 30vw at 50% 115%, rgba(23, 84, 155, 0.55), transparent 75%);
+    radial-gradient(38vw 38vw at 100% 8%, rgba(125, 180, 235, 0.3), transparent 70%),
+    radial-gradient(50vw 30vw at 50% 115%, rgba(13, 107, 178, 0.55), transparent 75%);
 }
 
 /* header */
@@ -198,7 +198,7 @@
 }
 .mp__qbadge.is-live {
   color: #fff;
-  background: linear-gradient(135deg, #0499de, #C9A227);
+  background: linear-gradient(135deg, #0D6BB2, #C9A227);
   border-color: transparent;
 }
 /* Wraps just the SVG, so .mp__yaxis (absolute, inset:0) lines up with the
@@ -374,7 +374,7 @@
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .mp__spotlight-cta:hover {
-  background: linear-gradient(135deg, #0499de, #C9A227);
+  background: linear-gradient(135deg, #0D6BB2, #C9A227);
   border-color: transparent;
   transform: translateY(-1px);
 }

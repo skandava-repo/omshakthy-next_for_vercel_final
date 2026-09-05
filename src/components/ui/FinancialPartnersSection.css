@@ -4,9 +4,12 @@
    ============================================================ */
 
 .fp {
-  --fp-ink: #025f8a;
-  --fp-ink-muted: rgba(2, 95, 138, 0.68);
-  --fp-paper: #F8F8F5;
+  --fp-ink: #004385;
+  --fp-ink-muted: rgba(0, 67, 133, 0.68);
+  /* Was #F8F8F5 — a different off-white than TestimonialsSection's own
+     #f4f6f9 (also now matched by SpotlightSection and Footer). Same
+     #f4f6f9 here for the same reason. */
+  --fp-paper: #f4f6f9;
   --fp-brass: #C9A227;
   --fp-hair: rgba(200, 161, 90, 0.35);
 

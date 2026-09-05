@@ -29,7 +29,13 @@
   display: flex;
   flex: 1;
   min-height: 0;
-  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  /* Was cubic-bezier(0.65, 0, 0.35, 1) — a sharp accelerate-then-slam-the-
+     brakes curve that reads as abrupt on a full-viewport horizontal slide.
+     Switched to the same "proven" ease-out curve already used everywhere
+     else in this codebase for section/card transitions (Testimonials'
+     featured-card swap, LeadersSection's entrances, etc.) for a
+     consistent, genuinely smooth feel instead of a jarring one. */
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
@@ -51,7 +57,16 @@
   z-index: 0;
 }
 
-/* Background — scale-fade entrance only, no zoom */
+/* Background — scale-fade entrance only, no zoom.
+   Was transition: opacity 0.9s ease — a different duration AND a different
+   easing curve than .ct-track's own 0.6s cubic-bezier(0.16, 1, 0.3, 1). The
+   two motions (the whole track sliding horizontally, this image fading up)
+   were running as visibly separate animations instead of one coordinated
+   move, which is a big part of what read as "not smooth." Matched exactly
+   to .ct-track's timing/curve so they finish together. will-change: opacity
+   plus a forced compositing layer (translateZ(0)) keeps this on the GPU
+   during the transition instead of repainting a multi-megapixel background
+   image on the main thread every frame. */
 .ct-slide__bg {
   position: absolute;
   inset: 0;
@@ -59,7 +74,9 @@
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.4;
-  transition: opacity 0.9s ease;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 /* Active slide — image fades in */

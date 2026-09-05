@@ -163,7 +163,7 @@
 }
 
 .property-item__status--ongoing {
-  color: #4FC3F7;
+  color: #7DB4EB;
 }
 
 .property-item__status--sold {
@@ -305,7 +305,7 @@
 .property-cta__btn {
   display: inline-block;
   padding: 20px 46px;
-  background-color: #0499de;
+  background-color: #0D6BB2;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -313,7 +313,7 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid #0499de;
+  border: 1px solid #0D6BB2;
   border-radius: 30px;
   transition: 0.3s all ease;
   white-space: normal;

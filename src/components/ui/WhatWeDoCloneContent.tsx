@@ -103,11 +103,19 @@ const rows: Row[] = [
 
 const WhatWeDoCloneContent = () => {
   return (
-    <main className="wc" data-header-theme="light">
+    // Was <main> — this component is used both as a standalone page's
+    // whole body (/what-we-do) and, now, as one section embedded inside
+    // the home page's own <main> (HomeClient.tsx already has one); a
+    // nested <main> would be invalid there. <section> here, matching the
+    // convention every other normal-flow home section already uses
+    // (FinancialPartnersSection, SpotlightSection: <section
+    // aria-label="..." data-header-theme="light">) — the standalone page
+    // now supplies its own <main> wrapper instead (see what-we-do/page.tsx).
+    <section className="wc" aria-label="What we do" data-header-theme="light">
       <div className="wc__body">
         <section className="wc__left">
           <p className="wc__eyebrow">
-            Capability Statement
+            What    We    Do
             <span className="wc__eyebrow-line" />
           </p>
 
@@ -165,7 +173,7 @@ const WhatWeDoCloneContent = () => {
           })}
         </section>
       </div>
-    </main>
+    </section>
   )
 }
 

@@ -13,7 +13,13 @@ export default function WhatWeDo7Page() {
   return (
     <>
       <Header />
-      <WhatWeDoCloneContent />
+      {/* WhatWeDoCloneContent's own root is now a <section>, not <main>
+         (it's also embedded as a section inside the home page now, which
+         already has its own <main>) — this standalone page supplies the
+         <main> landmark instead. */}
+      <main>
+        <WhatWeDoCloneContent />
+      </main>
       <Footer />
     </>
   )

@@ -12,6 +12,20 @@
      flow sections would paint ON TOP of this fixed overlay instead of
      staying hidden behind it. */
   z-index: 5;
+  /* This had no background of its own — it relied entirely on whichever
+     child section happened to be showing to be fully opaque. Since this
+     is position:fixed, it takes zero space in normal document flow, which
+     means FinancialPartnersSection and SpotlightSection (both normal-flow
+     siblings rendered right after it) sit at y:0 in the actual document —
+     exactly where this fixed overlay visually clips. Confirmed live via a
+     screen recording: a brief flash of those two sections ghosted through
+     during a transition, too fast to catch with a manual screenshot but
+     real on video. A solid backstop color here closes off that entire
+     class of "gap in a child's own coverage lets the page behind it show
+     through" bugs, regardless of what exactly causes any single momentary
+     gap (transition timing, an image not yet painted, etc.) — it no
+     longer matters, because the overlay itself is never see-through. */
+  background: #f4f6f9;
 }
 
 /* Released: hands off to native scroll for whatever's rendered after

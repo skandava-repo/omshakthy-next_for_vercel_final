@@ -136,9 +136,9 @@
   align-items: center;
   gap: 0.9rem;
   font-family: 'JetBrains Mono', Consolas, monospace;
-  font-size: 0.8rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--wc-blue);
   margin: 0 0 clamp(1.5rem, 4vh, 2.6rem);

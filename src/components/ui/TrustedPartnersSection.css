@@ -167,7 +167,7 @@
   transition: -webkit-text-stroke-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .tp__index-row.is-active .tp__index-num {
-  -webkit-text-stroke: 1px rgba(10, 90, 148, 0.8);
+  -webkit-text-stroke: 1px rgba(0, 67, 133, 0.8);
   transform: scale(1.08);
 }
 

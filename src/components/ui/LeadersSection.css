@@ -283,7 +283,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, var(--os-blue, #0D6BB2) 0%, var(--os-blue-deep, #004385) 100%);
+  /* Leadership is explicitly excluded from the site-wide blue
+     consolidation — hardcoded to its own original #0B2C4E rather than
+     var(--os-blue-deep), which the rest of the site's global consolidation
+     changed to #004385. Using the variable here would have silently
+     pulled this page along with every future change to that shared
+     token, even with the fallback text reverted, since the variable
+     itself (not the fallback) is what actually resolves. */
+  background: linear-gradient(160deg, var(--os-blue, #0D6BB2) 0%, #0B2C4E 100%);
 }
 .ld3__photo-placeholder span {
   font-family: 'Fraunces', Georgia, serif;

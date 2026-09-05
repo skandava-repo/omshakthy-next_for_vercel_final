@@ -16,7 +16,7 @@ interface Property {
 const properties: Property[] = [
   {
     image: '/canopus-magha.png',
-    name: 'Canopus Magha',
+    name: 'Kanopus Magha',
     location: 'Guduvanchery, Chennai',
     status: 'Ongoing',
     type: 'Residential Plots',
@@ -49,7 +49,7 @@ const properties: Property[] = [
   },
   {
     image: '/property-5.png',
-    name: 'Canopus Mithila',
+    name: 'Kanopus Mithila',
     location: 'Vandalur, Chennai',
     status: 'Sold',
     type: 'Gated Community',

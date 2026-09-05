@@ -21,7 +21,7 @@
   --xf-paper: var(--os-paper);      /* #FBF8F2 Paper White    */
   --xf-cream: var(--os-cream);      /* #F4EFE6 Warm Cream     */
   --xf-brass: var(--os-brass);      /* #C8A15A Brass          */
-  --xf-mist: var(--os-mist);        /* #8DB4D1 Mist Blue      */
+  --xf-mist: var(--os-mist);        /* #7DB4EB Mist Blue      */
 
   /* Section ground — matched to the PriceTrends (.mp) section so the two
      adjacent slides read as one system.
@@ -366,7 +366,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   line-height: 1.5;
-  color: #A8D8F5;
+  color: #7DB4EB;
   text-transform: uppercase;
   background: rgba(0, 0, 0, 0.2);
   display: inline-block;

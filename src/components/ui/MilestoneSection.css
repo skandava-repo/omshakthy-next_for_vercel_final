@@ -8,7 +8,7 @@
   --ms-blue-lit:#7DB4EB;--ms-blue-pale:#7DB4EB;
   /* data pair: light step = cleared, deep step = blocked */
   --ms-cleared:#0D6BB2;--ms-blocked:#004385;
-  --ms-glass:rgba(10,90,148,.5);
+  --ms-glass:rgba(0,67,133,.5);
   --ms-hair:rgba(251,248,242,.12);
   /* Blue is the plane, end to end. Navy is reduced to a thin seam at the very
      top and bottom edges (~5% of the surface) instead of anchoring the field. */
@@ -44,8 +44,8 @@
 /* Corners only, and lighter at the bottom now that the city fills it. */
 .ms-vignette{position:absolute;inset:0;pointer-events:none;z-index:1;
   background:
-    radial-gradient(ellipse 138% 106% at 50% 46%,transparent 72%,rgba(10,90,148,.34) 100%),
-    linear-gradient(180deg,rgba(10,90,148,.34) 0%,transparent 14%,transparent 95%,rgba(10,90,148,.16) 100%)}
+    radial-gradient(ellipse 138% 106% at 50% 46%,transparent 72%,rgba(0,67,133,.34) 100%),
+    linear-gradient(180deg,rgba(0,67,133,.34) 0%,transparent 14%,transparent 95%,rgba(0,67,133,.16) 100%)}
 .ms-grain{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.035;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 .ms-horizon{position:absolute;left:0;right:0;top:30%;height:1px;z-index:1;pointer-events:none;
@@ -202,15 +202,15 @@
 .ms-stats{display:flex;gap:0;flex-wrap:wrap;align-items:flex-start}
 /* When stats follow a bar, they need their own air + a separating hairline */
 .ms-stats-after-bar{margin-top:20px;padding-top:20px;
-  border-top:1px solid rgba(10,90,148,.14)}
-.ms-stats div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(10,90,148,.16)}
+  border-top:1px solid rgba(0,67,133,.14)}
+.ms-stats div{padding-right:28px;margin-right:28px;border-right:1px solid rgba(0,67,133,.16)}
 .ms-stats div:last-child{border-right:none;margin-right:0;padding-right:0}
 /* Figures wear the sans, proportional — a display serif on a data figure
    reads as decoration, and tabular-nums makes big numbers look loose. */
 .ms-stats .sv{font-family:var(--sans);font-size:clamp(24px,2.4vw,30px);font-weight:500;
   color:#004385;line-height:1;letter-spacing:-.01em}
 .ms-stats .sk{font-family:var(--roman);font-size:8px;letter-spacing:.26em;text-transform:uppercase;
-  color:rgba(10,90,148,.62);margin-top:9px;white-space:nowrap}
+  color:rgba(0,67,133,.62);margin-top:9px;white-space:nowrap}
 
 /* Stacked bar: 2 series, 2px surface gap, both direct-labelled + legend,
    so identity never rides on hue alone. Inset track gives it a groove. */
@@ -229,7 +229,7 @@
 /* On the ivory sheet the seam shows the ivory card through it */
 .ms-legend{display:flex;gap:24px;flex-wrap:wrap}
 .ms-legend span{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);
-  font-size:11.5px;color:rgba(10,90,148,.78);letter-spacing:.03em}
+  font-size:11.5px;color:rgba(0,67,133,.78);letter-spacing:.03em}
 .ms-legend i{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
 /* Two steps of ONE hue can't carry identity on colour alone, so each swatch
    also differs in form: the deep step gets an ivory ring. With the direct

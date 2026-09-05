@@ -9,7 +9,7 @@ const milestones = [
     description: 'Founded OmShakthy Agencies (Madras) Private Limited for land aggregation.',
     stat: '1',
     statLabel: 'Company Founded',
-    image: '/timeline-1991.png',
+    image: '/timeline-1991.jpg',
   },
   {
     year: '1993',
@@ -17,7 +17,7 @@ const milestones = [
     description: 'Acquired 350 acres for SIDCO, establishing credibility.',
     stat: '350',
     statLabel: 'Acres Acquired',
-    image: '/timeline-1993.png',
+    image: '/timeline-1993.jpg',
   },
   {
     year: '1997',
@@ -25,7 +25,7 @@ const milestones = [
     description: 'Acquired 2000 acres for Mahindra World City SEZ without litigation.',
     stat: '2,000',
     statLabel: 'Acres for SEZ',
-    image: '/timeline-1997.png',
+    image: '/timeline-1997.jpg',
   },
   {
     year: '1998',
@@ -33,7 +33,7 @@ const milestones = [
     description: 'Entered construction, winning projects close to 5 million sq.ft.',
     stat: '5M',
     statLabel: 'Sq.Ft Projects',
-    image: '/timeline-1998.png',
+    image: '/timeline-1998.jpg',
   },
   {
     year: '2000',
@@ -41,7 +41,7 @@ const milestones = [
     description: 'Partnered with Pepsi and Reliance across Tamil Nadu.',
     stat: '40',
     statLabel: 'Acres for Pepsi',
-    image: '/timeline-2000.png',
+    image: '/timeline-2000.jpg',
   },
   {
     year: '2024',
@@ -49,7 +49,7 @@ const milestones = [
     description: '35+ years. 7,500+ customers. 7,500+ acres. 30+ projects.',
     stat: '5,000+',
     statLabel: 'Acres Aggregated',
-    image: '/timeline-2024.png',
+    image: '/timeline-2024.jpg',
   },
 ]
 
@@ -65,6 +65,17 @@ const CinematicTimeline = () => {
   // Expose a handler PageController can call. Returns true if the timeline
   // consumed the scroll (still has milestones left in that direction),
   // false if it's at a boundary and PageController should move sections.
+  //
+  // __timelineReset is separate and intentional: PageController calls it
+  // specifically when the user backs OUT of LeadersSection into this one
+  // (Leadership -> Timeline, scrolling up) — re-entering should always
+  // restart at 1991, not resume wherever the timeline was left (e.g. still
+  // on 2024 from having scrolled all the way through it earlier). This
+  // used to also fire on every up-tick while already INSIDE the timeline,
+  // which is what caused a real bug (a single accidental up-blip ejecting
+  // the user to a different section entirely, read as the timeline
+  // "skipping") — that part was removed; only the Leadership-re-entry
+  // case calls this now.
   useEffect(() => {
     (window as any).__timelineAdvance = (dir: number) => {
       const next = activeIndexRef.current + dir
@@ -74,8 +85,6 @@ const CinematicTimeline = () => {
       }
       return false // boundary — let page move
     }
-    // Allows PageController to reset the timeline back to the first slide
-    // when the user scrolls away from it (e.g. scrolling up past it).
     ;(window as any).__timelineReset = () => {
       setActiveIndex(0)
     }
@@ -101,7 +110,7 @@ const CinematicTimeline = () => {
                 className="ct-slide__bg"
                 style={{
                   backgroundImage: `url(${m.image})`,
-                  backgroundPosition: m.image === '/timeline-1997.png' ? 'center 50%' : m.image === '/timeline-1998.png' ? 'center 40%' : ['/timeline-1993.png', '/timeline-2000.png', '/timeline-2024.png'].includes(m.image) ? 'center 30%' : 'center',
+                  backgroundPosition: m.image === '/timeline-1997.jpg' ? 'center 50%' : m.image === '/timeline-1998.jpg' ? 'center 40%' : ['/timeline-1993.jpg', '/timeline-2000.jpg', '/timeline-2024.jpg'].includes(m.image) ? 'center 30%' : 'center',
                   backgroundSize: 'cover',
                 }}
               />

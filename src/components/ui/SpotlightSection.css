@@ -4,31 +4,31 @@
    ============================================================ */
 
 .sl {
-  --sl-ink: #025f8a;
-  --sl-ink-muted: rgba(2, 95, 138, 0.68);
-  --sl-paper: #F8F8F5;
+  --sl-ink: #004385;
+  --sl-ink-muted: rgba(0, 67, 133, 0.68);
+  /* Was #F8F8F5 — a visibly different off-white than Footer.css's
+     #f4f6f9 right below this section, which is itself matched to
+     TestimonialsSection's own background. Same #f4f6f9 here now, so
+     there's no seam between this section and the footer. */
+  --sl-paper: #f4f6f9;
   --sl-brass: #C9A227;
   --sl-hair: rgba(200, 161, 90, 0.35);
 
   position: relative;
-  /* Was height:100%, resolved against the old .page-controller__section
-     wrapper (a hard 100vh box). Now a normal-flow sibling below the
-     scroll-jacked area, so it needs its own definite height for that same
-     100%-height chain (used by descendants like .sl__tile) to keep working. */
-  height: 100vh;
+  /* Was height:100vh, resolved against the old .page-controller__section
+     wrapper (a hard 100vh box) — a leftover from when this was part of
+     the pinned scroll-jacked slide stack. Now a normal-flow sibling
+     (like FinancialPartnersSection right above it, which never had this
+     constraint), forcing a full 100vh here just reintroduced the same
+     "large gap" bug in a different spot: content is shorter than 100vh,
+     so whatever the leftover space's alignment, it collects as a dead
+     zone somewhere — first that was empty slack above the grid
+     (centered), then below it (flex-start), and either way it ends up
+     as visible blank space between this section and Footer. Padding-
+     driven intrinsic height, matching .fp, removes the leftover space
+     entirely instead of relocating it. */
   overflow: hidden;
-  display: flex;
-  /* Was center — with a fixed 100vh box and content shorter than that,
-     centering split the leftover space evenly above and below, putting
-     ~106px of pure empty slack between this section's own top edge and
-     its content (on top of FinancialPartnersSection's own bottom
-     padding right above it) — that's what read as "a large gap"
-     between the two sections. flex-start plus .sl__inner's own existing
-     top padding keeps a small intentional gap instead of an accidental
-     large one; the leftover space now collects below the grid instead,
-     which isn't visible as a "gap between sections" the way top slack
-     was. */
-  align-items: flex-start;
+  padding: clamp(2rem, 6vh, 4rem) 0;
   background: var(--sl-paper);
   color: var(--sl-ink);
   font-family: 'Inter', sans-serif;
@@ -40,7 +40,9 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vh, 2.5rem) clamp(1.25rem, 6vw, 6rem);
+  /* Vertical spacing now lives on .sl itself (padding-driven intrinsic
+     height); horizontal-only here so it isn't doubled up. */
+  padding: 0 clamp(1.25rem, 6vw, 6rem);
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 3vh, 2rem);
@@ -121,7 +123,7 @@
   overflow: hidden;
   text-decoration: none;
   color: #fff;
-  background: rgba(2, 95, 138, 0.06);
+  background: rgba(0, 67, 133, 0.06);
   border: 1px solid rgba(11, 31, 58, 0.08);
   box-shadow:
     0 2px 6px rgba(11, 31, 58, 0.06),
@@ -154,7 +156,7 @@
 .sl__tile-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(2, 61, 87, 0.82) 0%, rgba(2, 61, 87, 0.25) 55%, transparent 90%);
+  background: linear-gradient(to top, rgba(0, 67, 133, 0.82) 0%, rgba(0, 67, 133, 0.25) 55%, transparent 90%);
 }
 
 .sl__tile-label {
@@ -196,10 +198,11 @@
 
 /* ---- Responsive ---- */
 @media (max-width: 900px) {
-  .sl {
-    height: auto;
-    min-height: 100vh;
-  }
+  /* No min-height: 100vh override here either — same reasoning as the
+     base rule above: the stacked mobile grid is its own definite height
+     (fixed row heights below), so forcing a 100vh floor on top of that
+     would just reopen the same dead-space-before-Footer gap on small
+     screens instead of desktop ones. */
 
   .sl__grid {
     grid-template-columns: 1fr 1fr;

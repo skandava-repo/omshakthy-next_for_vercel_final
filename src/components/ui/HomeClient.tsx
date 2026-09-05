@@ -7,7 +7,7 @@ import CinematicTimeline from '@/components/ui/CinematicTimeline'
 import MilestoneSection from '@/components/ui/MilestoneSection'
 import LeadersSection from '@/components/ui/LeadersSection'
 import TestimonialsSection from '@/components/ui/TestimonialsSection'
-import TrustedPartnersSection from '@/components/ui/TrustedPartnersSection'
+import WhatWeDoCloneContent from '@/components/ui/WhatWeDoCloneContent'
 import FinancialPartnersSection from '@/components/ui/FinancialPartnersSection'
 import SpotlightSection from '@/components/ui/SpotlightSection'
 import PageController from '@/components/ui/PageController'
@@ -35,15 +35,22 @@ export default function HomeClient() {
       <main>
         <IntroSection />
         {/* Snap-scroll (one wheel tick = one section) through Testimonials
-            AND Trusted Partners. Everything after that is normal free-flow
-            scroll — see PageController's `released` state for the handoff. */}
+            AND What We Do. Everything after that is normal free-flow
+            scroll — see PageController's `released` state for the
+            handoff. WhatWeDoCloneContent takes TrustedPartnersSection's
+            old spot as the last slide here — same snap mechanism (this
+            component's wheel handling), not a CSS-only scroll-snap
+            substitute (that was tried and didn't behave the same way;
+            see git history). TrustedPartnersSection itself is preserved
+            on its own at /what-we-do8 per explicit request, not
+            discarded. */}
         <PageController>
           <HeroSlider />
           <PropertyGrid />
           <CinematicTimeline />
           <LeadersSection />
           <TestimonialsSection />
-          <TrustedPartnersSection />
+          <WhatWeDoCloneContent />
         </PageController>
         {/* First thing native scroll reaches once the pillar gallery above
             releases — was part of TrustedPartnersSection, split out so

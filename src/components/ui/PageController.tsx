@@ -49,13 +49,27 @@ const PageController = ({ children }: PageControllerProps) => {
 
     const dir = e.deltaY > 0 ? 1 : -1
 
-    // If current section is the timeline (index 2):
-    // - Scrolling down steps through the horizontal milestones one at a time.
-    // - Scrolling up skips that and exits the section immediately (one scroll
-    //   up moves straight to the previous page section).
+    // If current section is the timeline (index 2), step through its
+    // horizontal milestones one at a time in EITHER direction, only
+    // falling through to a real section change once already at a
+    // boundary milestone (0 or the last one).
+    //
+    // This used to be asymmetric — scrolling down stepped one milestone
+    // at a time, but scrolling up called timelineReset() and fell straight
+    // through to a full section change on the very first up-tick, no
+    // matter which milestone was showing. Trackpad momentum/rubber-banding
+    // commonly produces a brief, unintended reversal in deltaY as a mostly-
+    // downward gesture settles — with the old asymmetric handling, that
+    // single accidental blip would eject the user straight out of the
+    // timeline and onto a different page section, which is exactly what
+    // read as the timeline "skipping" — it wasn't the horizontal transition
+    // itself, it was losing the whole section. Routing both directions
+    // through timelineAdvance fixes this: an accidental up-blip just steps
+    // back one milestone (harmless), and the section only actually changes
+    // once the user is genuinely at the first/last milestone and keeps
+    // going.
     const timelineAdvance = (window as any).__timelineAdvance
-    const timelineReset = (window as any).__timelineReset
-    if (currentSection === 2 && dir === 1 && typeof timelineAdvance === 'function') {
+    if (currentSection === 2 && typeof timelineAdvance === 'function') {
       const consumed = timelineAdvance(dir)
       if (consumed) {
         // Timeline handled it — block section change briefly
@@ -63,10 +77,19 @@ const PageController = ({ children }: PageControllerProps) => {
         setTimeout(() => { isAnimating.current = false }, 700)
         return
       }
-      // Boundary reached — fall through to move sections
+      // Boundary reached in this direction — fall through to move sections
     }
 
-    if (currentSection === 2 && dir === -1 && typeof timelineReset === 'function') {
+    // Backing out of LeadersSection (index 3) into the timeline (index 2)
+    // should always restart the timeline at its first milestone (1991),
+    // not resume wherever it was last left — e.g. if the user scrolled
+    // all the way through to 2024 before moving on to Leadership, going
+    // back should show 1991 again, not land back on 2024. This is
+    // deliberately narrow: only this specific transition resets it, not
+    // every up-scroll (see __timelineReset's own comment for why that
+    // used to be broader and caused a real bug).
+    const timelineReset = (window as any).__timelineReset
+    if (currentSection === 3 && dir === -1 && typeof timelineReset === 'function') {
       timelineReset()
     }
 

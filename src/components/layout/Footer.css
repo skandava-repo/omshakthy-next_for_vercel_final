@@ -1,0 +1,297 @@
+/* ============================================
+   FOOTER
+   Logo + tagline and three link columns in normal content flow, a
+   monochrome skyline corner illustration, plus a social-icons bottom
+   bar (no divider line above it, and no copyright/privacy line — both
+   removed per request). Dark blue gradient background (matching
+   Header/TestimonialsSection), white text at reduced opacity for body
+   copy — this was tried once before, reverted to a light background
+   for a while, and is back again per request.
+   ============================================ */
+
+.ft {
+  position: relative;
+  overflow: hidden;
+  /* Separator from whatever content sits directly above the footer —
+     needed since SpotlightSection now shares this exact #f4f6f9
+     background (see that file's own comment), so without a real
+     boundary the two would blend into one continuous block with no
+     visible seam at all. 10px, not a hairline, so it reads clearly
+     as a deliberate divider rather than a subpixel-thin line that's
+     easy to miss. var(--border), globals.css's shared divider-gray
+     token. */
+  border-top: 2px solid var(--border, #E5E7EB);
+  /* Back to the site's dark blue gradient (--gradient-dark-section,
+     also used by Header and TestimonialsSection's featured card) — was
+     #f4f6f9 (matching TestimonialsSection's light background) before
+     this. Text colors below are updated to match (white at reduced
+     opacity for body copy, full white on hover) — the same pairing
+     used the first time this was tried; see each rule's own comment. */
+  background: var(--gradient-dark-section, linear-gradient(180deg, #004385 0%, #0D6BB2 100%));
+}
+
+.ft__inner {
+  position: relative;
+  z-index: 2;
+  /* Left-aligned with a left margin, not right-anchored — a previous
+     pass here (margin-left: auto, margin-right: 150px) tried to
+     right-anchor the box, which needed care around auto-margins only
+     resolving against a definite width (see git history for that
+     saga). Left-aligning sidesteps that whole class of bug: margin-left
+     is a fixed percentage (never auto), so there's no ambiguity to
+     resolve — it's exactly that far from the left edge at any viewport
+     width. Was 20%, then 28% (too far right per feedback), then 24%,
+     nudged slightly left again to 21%. Width caps at 1280px on very
+     wide screens (margin-right: auto absorbing the rest on the right
+     in that case), otherwise fills the remaining 79% (100% - 21%). */
+  width: min(1280px, 77%);
+  margin-left: 23%;
+  margin-right: auto;
+  /* Top padding trimmed (was clamp(3rem, 6vw, 4.5rem), then
+     overcorrected down to clamp(1.5rem, 3vw, 2rem) — too aggressive,
+     the footer read as too short) — settled at a middle ground.
+     .ft__deco's own size stays untouched either way; this only tunes
+     the surrounding padding, not the image. */
+  padding: clamp(2.25rem, 4.5vw, 3.25rem) clamp(1.25rem, 6vw, 3rem) 0;
+}
+
+.ft__top {
+  display: flex;
+  justify-content: space-between;
+  gap: clamp(2rem, 6vw, 5rem);
+  /* Trimmed, then eased back up — same reasoning as .ft__inner's top
+     padding above. */
+  padding-bottom: clamp(2.25rem, 4.5vw, 3.25rem);
+}
+
+/* ---- Brand block (left) ---- */
+.ft__brand {
+  flex-shrink: 0;
+  min-width: 220px;
+}
+
+.ft__logo {
+  display: block;
+  width: fit-content;
+}
+
+.ft__logo-img {
+  display: block;
+  height: 64px;
+  width: auto;
+  /* Opaque white border + soft dark shadow — against this dark blue
+     gradient (close in hue to the logo tile itself), a faint border
+     would leave the tile with no visible edge at all, and a blue-toned
+     shadow would barely show up either. */
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.ft__tagline {
+  margin-top: 14px;
+  max-width: 260px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.7;
+  /* Brighter/bolder per request — was 0.72 opacity + normal weight. */
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ---- Link columns (right) ----
+   Grid, not flex-wrap: at the widths between the mobile stacking
+   breakpoint and a fully wide screen, three flex items with generous
+   gaps could run out of row space and wrap the third column ("Contact")
+   onto its own line below "Company" — a fixed 3-track grid keeps all
+   three side by side down to the breakpoint where .ft__top itself
+   switches to a stacked column layout. */
+.ft__columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(130px, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.ft__col-title {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 18px;
+}
+
+.ft__col-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ft__link {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  /* Brighter per request — was 0.65 opacity + normal weight. */
+  color: rgba(255, 255, 255, 0.88);
+  transition: color 0.2s ease;
+}
+
+.ft__link:hover {
+  color: #fff;
+}
+
+.ft__contact-line {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ---- Corner illustration ----
+   Monochrome skyline, bottom-left, uncropped (height: auto preserves
+   its own aspect ratio — ~1.14:1, roughly square). Real transparency
+   confirmed via alpha-channel min/max before use (an earlier file at
+   the same-looking path turned out to have the checkerboard
+   "transparency" baked into opaque pixels — this one isn't that).
+   Full opacity, not dimmed — the previous illustration's 0.4 opacity
+   was tuned for legibility against a dark blue background; this
+   footer's background is light (#f4f6f9), and this artwork is itself
+   already a light grayscale line-art style, so it doesn't need
+   dimming to stay out of the text's way the way a bolder color image
+   would. z-index below .ft__inner and .ft__bottom (both z-index: 2)
+   so text stays legible over it. Hidden below the columns breakpoint
+   so it never competes with stacked text content on small screens. */
+.ft__deco {
+  position: absolute;
+  /* Was 0 (flush with the true left edge, already as far left as
+     possible within the footer's own box) — nudged further left per
+     request so it bleeds slightly past the edge; .ft's own
+     overflow: hidden clips it cleanly. */
+  left: -62px;
+  bottom: 0;
+  /* Slight width increase per request (was clamp(260px, 24vw, 420px)). */
+  width: clamp(290px, 27vw, 460px);
+  height: auto;
+  z-index: 1;
+  /* Slightly less than full opacity per request. */
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* ---- Bottom bar ----
+   A sibling of <footer>, not nested inside it (per request) — see
+   Footer.tsx. A thin white strip, not the dark blue gradient the rest
+   of the footer is on: the copyright/Privacy Policy line needed real
+   contrast, so this bar gets its own solid white backing rather than a
+   text color fighting the blue. Just the copyright line now — the
+   social icons moved back inside the footer (next to the address),
+   so the WhatsApp-clearance right padding that used to live here isn't
+   needed either; nothing in this bar reaches that corner anymore. */
+.ft__bottom {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  padding: 6px clamp(1.25rem, 6vw, 3rem);
+  display: flex;
+  align-items: center;
+}
+
+.ft__copyright {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--slate, #64748B);
+}
+
+.ft__bottom-link {
+  color: var(--slate, #64748B);
+  transition: color 0.2s ease;
+}
+
+.ft__bottom-link:hover {
+  color: var(--os-blue, #0D6BB2);
+}
+
+/* Now inside the footer, next to the address (moved out of the white
+   bottom bar per request) — back on the dark blue gradient, so needs
+   its own spacing from the address line above it. */
+.ft__socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* Translucent white circle + white icon, not solid blue — this sits on
+   the dark blue gradient again now (it briefly lived in the white
+   bottom bar, where solid blue was the right call; see git history).
+   Hover inverts to solid white with a blue icon for a clear
+   pressed/active state. */
+.ft__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.ft__social:hover {
+  background: #fff;
+  color: var(--os-blue, #0D6BB2);
+  transform: translateY(-2px);
+}
+
+.ft__social svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .ft__top {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .ft__deco {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .ft__columns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .ft__bottom {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ---- WhatsApp floating button (unchanged position/behavior) ---- */
+.ft__whatsapp {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--os-blue, #0D6BB2);
+  box-shadow: var(--shadow-lg, 0 12px 48px rgba(13, 107, 178, 0.18));
+  transition: transform 0.2s ease;
+}
+
+.ft__whatsapp:hover {
+  transform: scale(1.1);
+}

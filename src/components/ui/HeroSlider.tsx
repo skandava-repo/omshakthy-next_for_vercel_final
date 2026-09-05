@@ -8,7 +8,7 @@ const slides = [
   { image: '/hero-slide-3.png', title: 'Elite Grand' },
   { image: '/hero-slide-1.png', title: 'OmShakthy Santha' },
   { image: '/hero-slide-8.png', title: 'Elite Apartments' },
-  { image: '/hero-slide-2.png', title: 'Canopus Magha' },
+  { image: '/hero-slide-2.png', title: 'Kanopus Magha' },
   { image: '/hero-new-2.png', title: 'Premium Living' },
 ]
 

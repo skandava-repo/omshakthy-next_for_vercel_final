@@ -69,7 +69,15 @@ const TrustedPartnersSection = () => {
             src={p.image}
             alt=""
             className={`tp__bg-img${active === i ? ' is-on' : ''}`}
-            loading={i === 0 ? 'eager' : 'lazy'}
+            // All 5 eager, not just the first — this section is held
+            // permanently off-screen by PageController's own transform
+            // (translateY on the whole track, not real document flow), so
+            // the browser's native loading="lazy" intersection check never
+            // considers images 1-4 "near the viewport" and never fetches
+            // them at all, no matter how long the section sits active and
+            // auto-cycling. The .is-on class was toggling correctly the
+            // whole time; the photos themselves just never loaded, leaving
+            // only the pale scrim visible — that's what read as "cloud."
           />
         ))}
         <span className="tp__bg-scrim" />
