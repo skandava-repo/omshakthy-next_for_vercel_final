@@ -483,7 +483,7 @@ const Regalia = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px" style={{ backgroundColor: C.hairLight }}>
           {[
             {
-              name: 'R. Ramachandran',
+              name: 'R. Ramachanthran',
               role: 'Founder',
               points: [
                 'Founded Omshakthy Agencies (Madras) Pvt Ltd in 1991',

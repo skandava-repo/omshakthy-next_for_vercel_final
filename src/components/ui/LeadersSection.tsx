@@ -26,7 +26,7 @@ type Leader = {
 
 const leaders: Leader[] = [
   {
-    name: 'R. Ramachandran',
+    name: 'R. Ramachanthran',
     role: 'Chairman',
     tag: 'Vision & Legacy',
     img: '/leaders/chairman.png',

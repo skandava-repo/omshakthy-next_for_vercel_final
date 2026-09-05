@@ -51,7 +51,7 @@ interface Leader {
 const leaders: Leader[] = [
   {
     cell: 'founder',
-    name: 'R. Ramachandran',
+    name: 'R. Ramachanthran',
     role: 'Founder',
     data: 'EST. 1991 · 30+ YEARS',
     image: '/leaders/founder-cutout.png',
