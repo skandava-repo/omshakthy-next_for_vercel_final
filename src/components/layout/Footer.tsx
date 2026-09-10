@@ -1,7 +1,18 @@
 import Link from 'next/link'
 import './Footer.css'
 
-const Footer = () => {
+interface FooterProps {
+  // Lets one page swap the corner illustration without affecting every
+  // other page's Footer — defaults to the site-wide monochrome skyline.
+  decoSrc?: string
+  // Optional extra class appended alongside .ft__deco, so a page can
+  // override just its own illustration's size (e.g. Projects wants it
+  // smaller) without touching the shared .ft__deco rule every other
+  // page (including home) still uses.
+  decoClassName?: string
+}
+
+const Footer = ({ decoSrc = '/footer-mono.png', decoClassName }: FooterProps) => {
   return (
     <>
     <footer className="ft">
@@ -120,12 +131,15 @@ const Footer = () => {
       {/* Corner illustration — a monochrome skyline silhouette, real
           transparency confirmed (not a checkerboard-preview artifact).
           Bottom-left, uncropped, matching the footer's light background
-          instead of the earlier version's dark-blue-tuned treatment. */}
+          instead of the earlier version's dark-blue-tuned treatment.
+          Swappable via decoSrc — the Projects page uses a different
+          image (the colorful 3D building render), every other page
+          gets this default. */}
       <img
-        src="/footer-mono.png"
+        src={decoSrc}
         alt=""
         aria-hidden="true"
-        className="ft__deco"
+        className={`ft__deco${decoClassName ? ` ${decoClassName}` : ''}`}
       />
 
     </footer>

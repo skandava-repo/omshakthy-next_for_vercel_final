@@ -174,9 +174,18 @@
   width: clamp(290px, 27vw, 460px);
   height: auto;
   z-index: 1;
-  /* Slightly less than full opacity per request. */
-  opacity: 0.95;
+  /* Was 0.95 — reduced further per request. */
+  opacity: 0.8;
   pointer-events: none;
+}
+
+/* Projects page only (Footer's decoClassName prop) — smaller and moved
+   right, per request, without touching the shared .ft__deco rule above
+   (which every other page, including home, still uses as-is for
+   footer-mono.png). left: 20% overrides the base rule's -62px. */
+.ft__deco--sm {
+  width: clamp(180px, 17vw, 290px);
+  left: 3%;
 }
 
 /* ---- Bottom bar ----

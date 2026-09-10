@@ -28,8 +28,11 @@ const FinancialPartnersSection = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const built = useSectionEnter(sectionRef, 150)
 
+  // No data-header-theme — dropped the "light" paper scrim (same fix
+  // as LeadersSection/WhatWeDoCloneContent) so the header shows the
+  // same dark gradient bar as Hero instead of a mismatched light one.
   return (
-    <section ref={sectionRef} className="fp" aria-label="Financial partners" data-header-theme="light">
+    <section ref={sectionRef} className="fp" aria-label="Financial partners">
       <div className="fp__inner">
         <span className="fp__label">Financial Partners</span>
         <motion.h3

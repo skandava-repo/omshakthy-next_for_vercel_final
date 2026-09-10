@@ -104,14 +104,18 @@ const rows: Row[] = [
 const WhatWeDoCloneContent = () => {
   return (
     // Was <main> — this component is used both as a standalone page's
-    // whole body (/what-we-do) and, now, as one section embedded inside
+    // whole body (what-we-do7/8) and, now, as one section embedded inside
     // the home page's own <main> (HomeClient.tsx already has one); a
     // nested <main> would be invalid there. <section> here, matching the
     // convention every other normal-flow home section already uses
-    // (FinancialPartnersSection, SpotlightSection: <section
-    // aria-label="..." data-header-theme="light">) — the standalone page
-    // now supplies its own <main> wrapper instead (see what-we-do/page.tsx).
-    <section className="wc" aria-label="What we do" data-header-theme="light">
+    // (FinancialPartnersSection, SpotlightSection). Dropped
+    // data-header-theme="light" — same fix as LeadersSection: this
+    // section's own background is light cream, so the paper scrim was
+    // the "technically correct" choice, but on the home page it read as
+    // inconsistent with Hero/PropertyGrid/Timeline/Leadership's shared
+    // dark gradient bar. No data-header-theme now falls through to that
+    // same default everywhere this component is used.
+    <section className="wc" aria-label="What we do">
       <div className="wc__body">
         <section className="wc__left">
           <p className="wc__eyebrow">

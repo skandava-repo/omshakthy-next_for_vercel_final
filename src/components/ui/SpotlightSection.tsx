@@ -149,8 +149,12 @@ const SpotlightSection = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const built = useSectionEnter(sectionRef, 150)
 
+  // No data-header-theme — dropped the "light" paper scrim (same fix
+  // as LeadersSection/WhatWeDoCloneContent/FinancialPartnersSection) so
+  // the header shows the same dark gradient bar as Hero instead of a
+  // mismatched light one.
   return (
-    <section ref={sectionRef} className="sl" aria-label="Omshakthy in Spotlight" data-header-theme="light">
+    <section ref={sectionRef} className="sl" aria-label="Omshakthy in Spotlight">
       <div className="sl__inner">
         <header className="sl__header">
           <span className="sl__eyebrow">Omshakthy in Spotlight</span>

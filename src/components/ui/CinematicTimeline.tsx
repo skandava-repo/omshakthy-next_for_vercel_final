@@ -110,7 +110,7 @@ const CinematicTimeline = () => {
                 className="ct-slide__bg"
                 style={{
                   backgroundImage: `url(${m.image})`,
-                  backgroundPosition: m.image === '/timeline-1997.jpg' ? 'center 50%' : m.image === '/timeline-1998.jpg' ? 'center 40%' : ['/timeline-1993.jpg', '/timeline-2000.jpg', '/timeline-2024.jpg'].includes(m.image) ? 'center 30%' : 'center',
+                  backgroundPosition: m.image === '/timeline-1997.jpg' ? 'center 22%' : m.image === '/timeline-1998.jpg' ? 'center 40%' : ['/timeline-1993.jpg', '/timeline-2000.jpg', '/timeline-2024.jpg'].includes(m.image) ? 'center 30%' : 'center',
                   backgroundSize: 'cover',
                 }}
               />

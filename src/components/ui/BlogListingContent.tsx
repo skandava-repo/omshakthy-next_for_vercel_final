@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { blogs } from './PriceTrends'
 import './BlogListingContent.css'
@@ -87,6 +87,38 @@ const BlogListingContent = () => {
   const filtered = filter === 'All' ? blogs : blogs.filter((b) => b.cat === filter)
 
   const today = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+
+  /* .bp__mixed's right banner needs to match the left column's actual
+     rendered height (two stacked .bp__mini cards + the gap between
+     them) — not an approximation. CSS alone can't do this reliably
+     here: the banner's own source photo is a portrait image (taller
+     than wide), and a flex/grid-based "stretch to fill" approach hits
+     a genuine circular-sizing case (the grid row's auto height is
+     computed FROM the banner's own intrinsic content size, which for
+     an aspect-ratio image ignores flex-basis/flex-grow and reports its
+     full un-shrunk height back into that same calculation). Measuring
+     the left column directly and applying it as an explicit pixel
+     height sidesteps that entirely. Only applied above the 860px
+     stacked-layout breakpoint (BlogListingContent.css) — below it,
+     bannerHeight stays undefined and the banner just flows naturally. */
+  const mixedListRef = useRef<HTMLDivElement>(null)
+  const [bannerHeight, setBannerHeight] = useState<number | undefined>(undefined)
+
+  useEffect(() => {
+    const el = mixedListRef.current
+    if (!el) return
+    const update = () => {
+      setBannerHeight(window.innerWidth > 860 ? el.getBoundingClientRect().height : undefined)
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [])
 
   return (
     <main className="bp">
@@ -270,7 +302,7 @@ const BlogListingContent = () => {
           text, not overlaid — the reference varies this on purpose
           instead of using the overlay treatment everywhere). */}
       <motion.section className="bp__mixed" {...reveal}>
-        <div className="bp__mixed-list">
+        <div className="bp__mixed-list" ref={mixedListRef}>
           {[avadi, milestones].map((b) => (
             <a href="#" className="bp__mini" key={b.title} aria-label={b.title}>
               <div className="bp__mini-body">
@@ -285,7 +317,7 @@ const BlogListingContent = () => {
           ))}
         </div>
 
-        <a href="#" className="bp__banner" aria-label={guduvancheri.title}>
+        <a href="#" className="bp__banner" aria-label={guduvancheri.title} style={bannerHeight ? { height: bannerHeight } : undefined}>
           <h2 className="bp__banner-title">{guduvancheri.title}</h2>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={guduvancheri.image} alt={guduvancheri.title} className="bp__banner-img" />

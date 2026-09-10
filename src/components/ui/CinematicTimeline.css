@@ -236,8 +236,14 @@
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* Done segments fade to a muted, desaturated tone instead of the same
+   vivid gradient as the active one — a completed year should read as
+   settled/past, leaving the active segment's blue+glow as the only
+   vivid thing on the bar. Flat color, not the two-stop gradient, so it
+   doesn't compete for attention on a second glance. */
 .ct-seg--done .ct-seg__fill {
   transform: scaleX(1);
+  background: rgba(13, 107, 178, 0.32);
 }
 
 .ct-seg--active {
@@ -274,13 +280,13 @@
   font-weight: 700;
 }
 
-/* Was rgba(165,107,61,0.5) — a brownish-gold leftover from before this
-   file's blue pass, so moving off a segment (e.g. 1991 -> 1993) left the
-   just-vacated year in a gold-family tone instead of actually reverting
-   to blue. Matches .ct-seg__year's own base color exactly, so gold
-   really is exclusive to the one currently-active segment. */
+/* Dimmed rather than the same full-strength blue as an upcoming year —
+   pairs with .ct-seg--done .ct-seg__fill's own muted fill above, so a
+   completed year reads as settled/past at a glance instead of looking
+   identical to a year that hasn't been reached yet. Gold stays
+   exclusive to the one currently-active segment either way. */
 .ct-seg--done .ct-seg__year {
-  color: #0D6BB2;
+  color: rgba(13, 107, 178, 0.5);
 }
 
 /* ---- Counter ---- */

@@ -453,14 +453,16 @@
   align-items: stretch;
 }
 
+/* Both this and .bp__card-img below were reduced ~30% per request —
+   this section was reading too large overall. */
 .bp__feature {
-  min-height: 320px;
+  min-height: 224px;
 }
 .bp__feature-link {
   position: relative;
   display: block;
   height: 100%;
-  min-height: 320px;
+  min-height: 224px;
   border-radius: 4px;
   overflow: hidden;
   text-decoration: none;
@@ -496,12 +498,12 @@
   right: 0;
   bottom: 0;
   z-index: 1;
-  padding: clamp(1.2rem, 2.4vw, 1.8rem);
+  padding: clamp(0.85rem, 1.7vw, 1.25rem);
 }
 .bp__feature-title {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 600;
-  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-size: clamp(0.91rem, 1.54vw, 1.19rem);
   line-height: 1.2;
   color: #FBF8F2;
   margin: 0 0 0.5rem;
@@ -529,10 +531,12 @@
 .bp__card-img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  /* Was 4/3 — same width, ~30% shorter, matching .bp__feature's own
+     30% reduction above. */
+  aspect-ratio: 1.9 / 1;
   object-fit: cover;
   border-radius: 3px;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.55rem;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .bp__card-link:hover .bp__card-img {
@@ -544,7 +548,7 @@
 .bp__card-title {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 600;
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-size: clamp(0.75rem, 1.12vw, 0.9rem);
   line-height: 1.25;
   margin: 0 0 0.4rem;
   transition: color 0.3s ease;
@@ -560,6 +564,15 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
   gap: clamp(1.5rem, 3vw, 2.5rem);
+  /* Default align-items: stretch would grow .bp__mixed-list to match
+     whatever the row's height ends up being — which, before
+     BlogListingContent.tsx's bannerHeight measurement existed, made
+     .bp__mixed-list report its OWN stretched (inflated) box as its
+     "height" instead of its true two-card content height, and that
+     wrong number is exactly what was being fed back into the banner.
+     start keeps the left column at its real content height so it can
+     be measured correctly. */
+  align-items: start;
 }
 .bp__mixed-list {
   display: flex;
@@ -612,8 +625,16 @@
 /* Headline sits above the photo as plain dark text here, not overlaid
    — the one place in the reference that doesn't use the scrim
    treatment, for rhythm. */
+/* Flex column. Height is NOT set here — .bp__mixed's grid row can't
+   reliably stretch this to match .bp__mixed-list (see BlogListingContent
+   .tsx's mixedListRef/bannerHeight comment for why the CSS-only version
+   of this hit a circular-sizing case), so the left stack's measured
+   height is applied as an explicit inline style instead. The image
+   still needs to be a flex child (flex: 1, min-height: 0 below) so it
+   absorbs whatever's left after the title once that real height lands. */
 .bp__banner {
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
 }
@@ -631,7 +652,19 @@
 .bp__banner-img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  /* No fixed aspect-ratio — .bp__banner now gets an explicit pixel
+     height (see BlogListingContent.tsx's bannerHeight), so this just
+     needs to be a well-behaved flex child that fills whatever's left
+     after the title: flex: 1 to grow, min-height: 0 to actually let it
+     shrink below its own intrinsic aspect-ratio size (the source photo
+     is a 3200x4000 portrait — without min-height: 0 a flex item's
+     default "auto" minimum floors it at its full width-derived height,
+     ~837px here, regardless of flex-grow/shrink). Below the 860px
+     stacked breakpoint bannerHeight is undefined (no inline height, no
+     left stack to match), so this falls back to its natural
+     aspect-ratio-driven size instead of collapsing to 0. */
+  flex: 1;
+  min-height: 0;
   object-fit: cover;
   border-radius: 3px;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -735,5 +768,12 @@
   }
   .bp__mixed {
     grid-template-columns: 1fr;
+  }
+  /* Stacked layout: .bp__banner is no longer sharing a grid row with
+     .bp__mixed-list, so there's no left-stack height for min-height: 0
+     to match against — without a real minimum here the image would
+     collapse to nearly nothing (just enough for the title). */
+  .bp__banner-img {
+    min-height: 240px;
   }
 }

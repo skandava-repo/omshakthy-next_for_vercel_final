@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import ProjectsContent from '@/components/ui/ProjectsContent'
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -12,15 +13,12 @@ export default function ProjectsPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-24 px-4 md:px-8 max-w-7xl mx-auto" style={{ backgroundColor: 'var(--paper)', color: 'var(--ink)' }}>
-        <h1 className="text-4xl font-bold mb-8" style={{ fontFamily: 'var(--font-heading)', color: 'var(--brass)' }}>
-          Projects
-        </h1>
-        <p style={{ color: 'var(--ink)' }}>
-          Projects page — project listings coming soon via CMS.
-        </p>
-      </main>
-      <Footer />
+      <ProjectsContent />
+      {/* This page alone gets the colorful 3D building render instead of
+          the site-wide monochrome skyline, and at a smaller size — both
+          per request, and both scoped to just this page via Footer's
+          own props rather than touching the shared .ft__deco rule. */}
+      <Footer decoSrc="/footer-building.png" decoClassName="ft__deco--sm" />
     </>
   )
 }

@@ -15,18 +15,8 @@ const navLinksRight = [
   { name: 'Contact', path: '/contact' },
 ]
 
-const sideMenuLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'Projects', path: '/projects' },
-  { name: 'About', path: '/about' },
-  { name: 'Gallery', path: '/gallery' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'Contact', path: '/contact' },
-]
-
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
   const [solid, setSolid] = useState(false)
   // Which data-header-theme value the currently-active section declares —
   // '' (default gradient/dark), 'light' (paper sections), or 'solid-blue'
@@ -105,10 +95,6 @@ const Header = () => {
     return () => window.removeEventListener('scroll', checkThemeByScroll)
   }, [])
 
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [location])
-
   return (
     <>
       <nav className={`site-nav ${scrolled || solid ? 'site-nav--scrolled' : ''} ${theme ? `site-nav--${theme}` : ''}`}>
@@ -173,34 +159,9 @@ const Header = () => {
             <Link href="/contact" className="site-nav__cta">
               Book Site Visit
             </Link>
-            <button
-              className={`site-nav__hamburger ${menuOpen ? 'active' : ''}`}
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-            >
-              <span></span>
-            </button>
           </div>
         </div>
       </nav>
-
-      {/* Side Menu */}
-      <div className={`side-menu ${menuOpen ? 'side-menu--open' : ''}`}>
-        <div className="side-menu__wrapper">
-          <button
-            className="side-menu__close"
-            onClick={() => setMenuOpen(false)}
-            aria-label="Close menu"
-          />
-          <ul className="side-menu__options">
-            {sideMenuLinks.map((link) => (
-              <li key={link.name} className="side-menu__option">
-                <Link href={link.path}>{link.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
     </>
   )
 }
