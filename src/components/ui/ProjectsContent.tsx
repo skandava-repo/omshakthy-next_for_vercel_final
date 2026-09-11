@@ -29,6 +29,11 @@ const C = {
   blue: '#0D6BB2',
   blueDeep: '#004385',
   mist: '#7DB4EB',
+  // Same blue-tinted fill AboutContent.tsx uses for its alternate
+  // section background — reused here on the filter fields themselves so
+  // they read as distinct controls against the white section instead of
+  // blending into it (white-on-white with only a 12%-opacity border).
+  panel: '#E9F1F9',
   border: 'rgba(13, 107, 178, 0.12)',
 }
 const display: React.CSSProperties = { fontFamily: "'Fraunces', Georgia, serif", letterSpacing: '-0.01em' }
@@ -151,7 +156,7 @@ const ProjectsContent = () => {
       <section
         className="relative flex items-end min-h-[46vh] pt-40 pb-14 px-6 md:px-10"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(0,67,133,0.42) 0%, rgba(13,107,178,0.25) 100%), url('/projects/hero.jpg')`,
+          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 100%), url('/projects/explore-bg.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -200,8 +205,19 @@ const ProjectsContent = () => {
           data (6 real locations, 4 real project types), not filler
           fields copied from a listing site that also tracks bedrooms
           and bathrooms, which our land/plot inventory doesn't have. */}
-      <section className="px-6 md:px-10 py-14" style={{ backgroundColor: '#fff' }} data-header-theme="light">
-        <div className="max-w-[1180px] mx-auto">
+      {/* Back to white with the animated building-sketch watermark — the
+          real aerial photo tried here didn't work out, reverted. */}
+      <section className="relative overflow-hidden px-6 md:px-10 pt-16 pb-32" style={{ backgroundColor: '#fff' }} data-header-theme="light">
+        <motion.img
+          src="/about/building-sketch.png"
+          alt=""
+          aria-hidden
+          className="absolute left-1/2 w-[900px] md:w-[1300px] max-w-none pointer-events-none select-none hidden sm:block"
+          style={{ opacity: 0.08, top: '80%', y: '-50%' }}
+          animate={{ x: ['-60%', '-40%', '-60%'], rotate: [-2, 2, -2] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="max-w-[1180px] mx-auto relative">
           <Reveal className="text-center mb-10">
             <h2
               className="text-2xl md:text-3xl font-bold uppercase"
@@ -231,7 +247,7 @@ const ProjectsContent = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search"
                 className="w-full pl-11 pr-4 py-3.5 rounded-full text-sm outline-none"
-                style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: '#fff' }}
+                style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: C.panel }}
               />
             </div>
 
@@ -239,7 +255,7 @@ const ProjectsContent = () => {
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="px-5 py-3.5 rounded-full text-sm outline-none"
-              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: '#fff' }}
+              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: C.panel }}
             >
               {locationOptions.map((l) => (
                 <option key={l} value={l}>{l}</option>
@@ -250,7 +266,7 @@ const ProjectsContent = () => {
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="px-5 py-3.5 rounded-full text-sm outline-none"
-              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: '#fff' }}
+              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: C.panel }}
             >
               {typeOptions.map((t) => (
                 <option key={t} value={t}>{t}</option>
@@ -263,7 +279,7 @@ const ProjectsContent = () => {
               value={status}
               onChange={(e) => setStatus(e.target.value as (typeof statusOptions)[number])}
               className="px-5 py-3.5 rounded-full text-sm outline-none"
-              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: '#fff' }}
+              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: C.panel }}
             >
               {statusOptions.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -277,7 +293,7 @@ const ProjectsContent = () => {
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
               className="px-5 py-3.5 rounded-full text-sm outline-none"
-              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: '#fff' }}
+              style={{ ...body, border: `1px solid ${C.border}`, color: C.ink, backgroundColor: C.panel }}
             >
               {priceRangeOptions.map((r) => (
                 <option key={r.label} value={r.label}>{r.label}</option>
@@ -315,7 +331,7 @@ const ProjectsContent = () => {
           message is the only thing that still needs its own centered,
           padded wrapper, since a single line of text going full-bleed
           edge-to-edge would just look broken. */}
-      <section className="py-16" data-header-theme="light">
+      <section data-header-theme="light">
         {filtered.length === 0 && (
           <div className="px-6 md:px-10">
             <div className="max-w-[1180px] mx-auto">
@@ -360,29 +376,82 @@ const ProjectsContent = () => {
                     loading="lazy"
                   />
 
-                  <div className="absolute top-5 right-5 text-right">
+                  <div className="absolute top-5 right-5">
                     <span
                       className="block text-sm"
                       style={{ ...body, color: 'rgba(255,255,255,0.92)', textShadow }}
                     >
                       {p.type}
                     </span>
-                    <span
-                      className="block mt-1 text-sm"
-                      style={{ ...body, color: 'rgba(255,255,255,0.92)', textShadow }}
-                    >
-                      {p.status === 'Ongoing' ? 'Ongoing' : 'Sold Out'}
-                    </span>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                  {/* Exact same block as PropertyGrid's (home page)
+                      .property-item__info / .property-item.active —
+                      dark scrim fading left-to-right, status pill above
+                      the name, name above a pin+location line, price
+                      last. Copied value-for-value, not approximated. */}
+                  <div
+                    className="absolute bottom-0 left-0 w-full flex flex-col"
+                    style={{
+                      padding: '1.2rem 1.4rem 1.4rem',
+                      background: 'linear-gradient(to right, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0) 55%)',
+                      gap: '0.2rem',
+                    }}
+                  >
+                    <span
+                      className="inline-flex items-center gap-1 rounded-full uppercase w-fit"
+                      style={{
+                        ...body,
+                        padding: '0.2rem 0.5rem',
+                        background: 'rgba(0,0,0,0.6)',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        fontSize: 9,
+                        fontWeight: 800,
+                        letterSpacing: '0.12em',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.6)',
+                        color: p.status === 'Ongoing' ? '#7DB4EB' : '#FBBF24',
+                      }}
+                    >
+                      <span
+                        className="rounded-full flex-shrink-0"
+                        style={{ width: 5, height: 5, background: 'currentColor', boxShadow: '0 0 6px currentColor' }}
+                      />
+                      {p.status === 'Ongoing' ? 'Ongoing' : 'Sold Out'}
+                    </span>
                     <h3
-                      className="text-xl md:text-2xl font-bold uppercase"
-                      style={{ ...display, color: '#fff', letterSpacing: '0.08em', lineHeight: 1.3, textShadow }}
+                      className="uppercase"
+                      style={{
+                        ...display,
+                        margin: '0.25rem 0 0',
+                        fontSize: 20,
+                        fontWeight: 600,
+                        lineHeight: 1.15,
+                        letterSpacing: '0.02em',
+                        color: '#fff',
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)',
+                      }}
                     >
                       {p.name}
                     </h3>
-                    <p className="mt-2 text-base md:text-lg" style={{ ...body, color: '#fff', textShadow }}>
+                    <p
+                      className="flex items-center gap-1"
+                      style={{
+                        ...body,
+                        margin: '0.15rem 0 0',
+                        fontSize: 11,
+                        color: 'rgba(255,255,255,0.85)',
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)',
+                      }}
+                    >
+                      <svg viewBox="0 0 24 24" width={10} height={10} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+                        <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
+                        <circle cx="12" cy="9.5" r="2.4" />
+                      </svg>
+                      {p.location}
+                    </p>
+                    <p
+                      style={{ ...body, marginTop: '0.35rem', fontSize: 13, fontWeight: 500, color: '#fff', textShadow: '1px 1px 2px rgba(0,0,0,0.9)' }}
+                    >
                       {p.price}
                     </p>
                   </div>

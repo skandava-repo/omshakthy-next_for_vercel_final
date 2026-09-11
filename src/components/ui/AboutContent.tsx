@@ -392,7 +392,7 @@ const AboutContent = () => {
       <section
         className="relative flex items-end min-h-[40vh] pt-20 pb-8 px-4 md:px-6"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(11,31,58,0.65) 0%, rgba(11,31,58,0.3) 45%, rgba(11,31,58,0.55) 100%), url('/about/hero.jpg')`,
+          backgroundImage: `linear-gradient(180deg, rgba(0,67,133,0.42) 0%, rgba(13,107,178,0.25) 100%), url('/about/hero.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
