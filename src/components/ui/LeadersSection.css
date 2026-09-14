@@ -246,7 +246,7 @@
      border sits inside the card's own width/padding math instead of
      growing the box — safe to add without touching any size value above. */
   border: 1px solid rgba(200, 161, 90, 0.4);
-  padding: clamp(17px, 1.2vw, 24px) clamp(17px, 1.2vw, 24px) clamp(78px, 5.16vw, 103px);
+  padding: clamp(17px, 1.2vw, 24px) clamp(17px, 1.2vw, 24px) clamp(62px, 4.16vw, 87px);
   transition: box-shadow 0.32s ease;
   animation: ld3Rise 0.6s ease both;
 }
@@ -302,6 +302,10 @@
 .ld3__body {
   width: 100%;
   text-align: center;
+  /* Nudges Name/tick/Role/Tag down slightly within the card. Taken from
+     .ld3__card's bottom padding (reduced by the same ~16px) rather than
+     added on top, so the capsule's total height is unchanged. */
+  margin-top: 1rem;
 }
 .ld3__name {
   font-family: 'Fraunces', Georgia, serif;
@@ -340,11 +344,13 @@
 .ld3__role {
   margin-top: 0.35rem;
   font-size: clamp(0.8rem, 0.89vw, 0.91rem);
-  color: rgba(11, 31, 58, 0.65);
+  font-weight: 700;
+  color: #0b1f3a;
 }
 .ld3__tag {
   margin-top: 0.15rem;
   font-size: clamp(0.8rem, 0.89vw, 0.91rem);
+  font-style: italic;
   color: rgba(11, 31, 58, 0.65);
 }
 

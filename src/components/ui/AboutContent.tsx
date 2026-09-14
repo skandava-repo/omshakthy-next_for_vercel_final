@@ -440,7 +440,7 @@ const AboutContent = () => {
         <section className="relative px-4 md:px-6 py-10 md:py-12" data-header-theme="light">
           <div className="max-w-[1180px] mx-auto grid md:grid-cols-2 gap-6 items-center relative">
             <Reveal>
-              <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink }}>
+              <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink, fontSize: '2.2rem', letterSpacing: '-0.03em' }}>
                 Chennai Property Experts
               </h2>
               <p className="mt-6 text-base md:text-lg leading-relaxed" style={{ color: C.slate }}>
@@ -501,7 +501,7 @@ const AboutContent = () => {
       <section className="relative px-4 md:px-6 py-10 md:py-12" style={{ backgroundColor: C.panel }} data-header-theme="light">
         <div className="max-w-[1180px] mx-auto">
           <Reveal className="text-center">
-            <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink }}>
+            <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink, fontSize: '2.2rem', letterSpacing: '-0.03em' }}>
               Why Thousands Choose Us
             </h2>
             <p className="mt-4 text-base md:text-lg" style={{ color: C.slate }}>
@@ -560,7 +560,7 @@ const AboutContent = () => {
             <KineticHeading
               text="Where We Build"
               className="text-4xl md:text-5xl font-bold"
-              style={{ ...display, color: C.ink }}
+              style={{ ...display, color: C.ink, fontSize: '2.2rem', letterSpacing: '-0.03em' }}
             />
             <Reveal delay={0.35}>
               <p className="mt-4 text-base md:text-lg" style={{ color: C.slate }}>
@@ -630,7 +630,7 @@ const AboutContent = () => {
       <section className="relative px-4 md:px-6 py-10 md:py-12" data-header-theme="light">
         <div className="max-w-[1180px] mx-auto">
           <Reveal className="text-center">
-            <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink }}>
+            <h2 className="text-4xl md:text-5xl font-bold" style={{ ...display, color: C.ink, fontSize: '2.2rem', letterSpacing: '-0.03em' }}>
               A Legacy Measured by Trust
             </h2>
             <p className="mt-4 text-base md:text-lg" style={{ color: C.slate }}>
@@ -673,7 +673,7 @@ const AboutContent = () => {
         >
           <div className="p-6 md:p-8 flex flex-col justify-center">
             <span style={{ width: 46, height: 4, background: C.blue, borderRadius: 4, display: 'block' }} />
-            <h2 className="mt-6 text-3xl md:text-4xl font-bold leading-tight" style={{ ...display, color: C.ink }}>
+            <h2 className="mt-6 text-3xl md:text-4xl font-bold leading-tight" style={{ ...display, color: C.ink, fontSize: '2.2rem', letterSpacing: '-0.03em' }}>
               Ready to Build Your Future With Us?
             </h2>
             <p className="mt-4 text-base md:text-lg leading-relaxed" style={{ color: C.slate }}>

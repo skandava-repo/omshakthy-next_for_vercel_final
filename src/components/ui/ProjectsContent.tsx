@@ -207,7 +207,7 @@ const ProjectsContent = () => {
           and bathrooms, which our land/plot inventory doesn't have. */}
       {/* Back to white with the animated building-sketch watermark — the
           real aerial photo tried here didn't work out, reverted. */}
-      <section className="relative overflow-hidden px-6 md:px-10 pt-16 pb-32" style={{ backgroundColor: '#fff' }} data-header-theme="light">
+      <section className="relative overflow-hidden px-6 md:px-10 pt-16 pb-16" style={{ backgroundColor: '#fff' }} data-header-theme="light">
         <motion.img
           src="/about/building-sketch.png"
           alt=""
@@ -321,53 +321,52 @@ const ProjectsContent = () => {
           feel. Text on the photo also carries no colored badge pill in
           the reference — just plain tracked uppercase text, which is
           what "Ongoing"/"Sold Out" now use instead of a filled chip. */}
-      {/* Full-bleed to the actual screen edges — no max-width, no side
-          padding on the section itself. Confirmed directly against the
-          reference: the grid runs edge-to-edge of the browser viewport,
-          not inside a centered container like the filter bar above it.
-          A previous restructuring pass accidentally nested this inside
-          a max-w-[1180px] wrapper while fixing an unrelated JSX bug,
-          which quietly killed the full-bleed behavior — the empty-state
-          message is the only thing that still needs its own centered,
-          padded wrapper, since a single line of text going full-bleed
-          edge-to-edge would just look broken. */}
-      <section data-header-theme="light">
-        {filtered.length === 0 && (
-          <div className="px-6 md:px-10">
-            <div className="max-w-[1180px] mx-auto">
-              <Reveal className="text-center py-20">
-                <p className="text-lg" style={{ color: C.slate }}>No projects match those filters.</p>
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="mt-4 px-6 py-3 rounded-full text-sm font-semibold"
-                  style={{ backgroundColor: C.ink, color: '#fff' }}
-                >
-                  Reset Filters
-                </button>
-              </Reveal>
-            </div>
-          </div>
-        )}
-        {filtered.length > 0 && (
-          <div className="grid md:grid-cols-2 gap-3">
+      {/* No longer full-bleed — per request, the cards were reading as
+          "flush left and right" against the viewport edges, so the grid
+          now sits inside the same px-6/md:px-10 + max-w-[1180px]
+          centered container the filter bar above it already uses,
+          shrinking the cards in from both edges. (Was deliberately
+          edge-to-edge before, matching a reference design — that's the
+          part being reversed here.) */}
+      <section className="px-4 md:px-6" data-header-theme="light">
+        <div className="max-w-[1600px] mx-auto">
+          {filtered.length === 0 && (
+            <Reveal className="text-center py-20">
+              <p className="text-lg" style={{ color: C.slate }}>No projects match those filters.</p>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="mt-4 px-6 py-3 rounded-full text-sm font-semibold"
+                style={{ backgroundColor: C.ink, color: '#fff' }}
+              >
+                Reset Filters
+              </button>
+            </Reveal>
+          )}
+          {filtered.length > 0 && (
+            <div className="grid md:grid-cols-2 gap-5">
             {filtered.map((p, i) => {
               /* Link vs. plain div can't share one polymorphic tag
                  without fighting TS's LinkProps typing — the inner
                  markup is identical either way, so it's built once
                  and just wrapped differently. */
-              /* Re-checked against the live reference directly (not
-                 from memory): there IS a gap between cards, but it's
-                 thin — a sliver of the page background, not the 24px
-                 rounded-shadow "card" treatment from the previous
-                 pass. The cards themselves are flat: sharp square
-                 corners, no elevation/shadow at all. gap-6 -> gap-3,
-                 and the border-radius/box-shadow that read as a
-                 generic "card" grid are gone. */
-              const cardStyle: React.CSSProperties = { aspectRatio: '2.5 / 1' }
-              const textShadow = '0 2px 12px rgba(0,0,0,0.55)'
+              /* Redesigned per request: rounded corners (was
+                 deliberately flat/square before). Previous pass tried a
+                 row of two separate boxes (a white panel + a photo box
+                 side by side), each with its own background — that
+                 always shows a seam where the two meet, because their
+                 colors can never line up pixel-for-pixel at every
+                 height. Fixed by going back to ONE photo filling the
+                 whole card, with a single gradient scrim laid on top of
+                 it (white/pale-blue, opaque on the left, fading to
+                 fully transparent by the image's midpoint) — the
+                 "opaque left portion" is just where that scrim reads as
+                 solid, so it's physically the same layer as the fade,
+                 not two things touching. Project details sit on top of
+                 the scrim as plain dark text. gap-3 -> gap-5 to narrow
+                 each card slightly, per request. */
               const cardInner = (
-                <>
+                <div className="relative overflow-hidden" style={{ aspectRatio: '2.5 / 1' }}>
                   <img
                     src={p.image}
                     alt={p.name}
@@ -376,45 +375,35 @@ const ProjectsContent = () => {
                     loading="lazy"
                   />
 
-                  <div className="absolute top-5 right-5">
-                    <span
-                      className="block text-sm"
-                      style={{ ...body, color: 'rgba(255,255,255,0.92)', textShadow }}
-                    >
-                      {p.type}
-                    </span>
-                  </div>
-
-                  {/* Exact same block as PropertyGrid's (home page)
-                      .property-item__info / .property-item.active —
-                      dark scrim fading left-to-right, status pill above
-                      the name, name above a pin+location line, price
-                      last. Copied value-for-value, not approximated. */}
+                  {/* One continuous scrim — opaque white/pale-blue on
+                      the left, gradually fading to fully transparent.
+                      Nothing else shares this edge, so there's nothing
+                      for it to seam against. */}
                   <div
-                    className="absolute bottom-0 left-0 w-full flex flex-col"
+                    className="absolute inset-0 pointer-events-none"
                     style={{
-                      padding: '1.2rem 1.4rem 1.4rem',
-                      background: 'linear-gradient(to right, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0) 55%)',
-                      gap: '0.2rem',
+                      background:
+                        'linear-gradient(to right, #ffffff 0%, #ffffff 20%, #eaf3fb 28%, rgba(234,243,251,0.65) 34%, rgba(234,243,251,0.25) 39%, rgba(234,243,251,0) 45%)',
                     }}
-                  >
+                  />
+
+                  {/* Project details, sitting on the opaque part of the scrim. */}
+                  <div className="absolute inset-y-0 left-0 flex flex-col justify-center" style={{ width: '38%', padding: '0 1.1rem 0 1.4rem' }}>
                     <span
                       className="inline-flex items-center gap-1 rounded-full uppercase w-fit"
                       style={{
                         ...body,
                         padding: '0.2rem 0.5rem',
-                        background: 'rgba(0,0,0,0.6)',
-                        border: '1px solid rgba(255,255,255,0.15)',
+                        background: p.status === 'Ongoing' ? 'rgba(13,107,178,0.1)' : 'rgba(180,83,9,0.1)',
                         fontSize: 9,
                         fontWeight: 800,
                         letterSpacing: '0.12em',
-                        textShadow: '0 1px 4px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.6)',
-                        color: p.status === 'Ongoing' ? '#7DB4EB' : '#FBBF24',
+                        color: p.status === 'Ongoing' ? C.blue : '#B45309',
                       }}
                     >
                       <span
                         className="rounded-full flex-shrink-0"
-                        style={{ width: 5, height: 5, background: 'currentColor', boxShadow: '0 0 6px currentColor' }}
+                        style={{ width: 5, height: 5, background: 'currentColor' }}
                       />
                       {p.status === 'Ongoing' ? 'Ongoing' : 'Sold Out'}
                     </span>
@@ -422,57 +411,59 @@ const ProjectsContent = () => {
                       className="uppercase"
                       style={{
                         ...display,
-                        margin: '0.25rem 0 0',
-                        fontSize: 20,
+                        margin: '0.3rem 0 0',
+                        fontSize: 28,
                         fontWeight: 600,
                         lineHeight: 1.15,
                         letterSpacing: '0.02em',
-                        color: '#fff',
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)',
+                        color: C.ink,
+                        overflowWrap: 'break-word',
+                        wordBreak: 'break-word',
+                        minWidth: 0,
+                        maxWidth: 210,
                       }}
                     >
                       {p.name}
                     </h3>
                     <p
                       className="flex items-center gap-1"
-                      style={{
-                        ...body,
-                        margin: '0.15rem 0 0',
-                        fontSize: 11,
-                        color: 'rgba(255,255,255,0.85)',
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)',
-                      }}
+                      style={{ ...body, margin: '0.15rem 0 0', fontSize: 15, color: C.slate, minWidth: 0 }}
                     >
-                      <svg viewBox="0 0 24 24" width={10} height={10} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+                      <svg viewBox="0 0 24 24" width={13} height={13} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
                         <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
                         <circle cx="12" cy="9.5" r="2.4" />
                       </svg>
                       {p.location}
                     </p>
-                    <p
-                      style={{ ...body, marginTop: '0.35rem', fontSize: 13, fontWeight: 500, color: '#fff', textShadow: '1px 1px 2px rgba(0,0,0,0.9)' }}
-                    >
+                    <p style={{ ...body, marginTop: '0.35rem', fontSize: 14.5, fontWeight: 600, color: C.ink }}>
                       {p.price}
                     </p>
+                    {/* Same type label already shown top-right on the
+                        photo (className="block text-sm") — also added
+                        here in the details panel, per request. */}
+                    <p className="block text-sm" style={{ ...body, marginTop: '0.35rem', color: C.slate }}>
+                      {p.type}
+                    </p>
                   </div>
-                </>
+                </div>
               )
               return (
                 <Reveal key={p.name} delay={(i % 2) * 0.08}>
                   {p.link ? (
-                    <Link href={p.link} className="relative block overflow-hidden" style={cardStyle}>
+                    <Link href={p.link} className="block overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(13, 107, 178, 0.35)' }}>
                       {cardInner}
                     </Link>
                   ) : (
-                    <div className="relative block overflow-hidden" style={cardStyle}>
+                    <div className="block overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(13, 107, 178, 0.35)' }}>
                       {cardInner}
                     </div>
                   )}
                 </Reveal>
               )
             })}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* ---------------- Stats strip ----------------

@@ -120,8 +120,8 @@
   box-shadow: 0 8px 24px rgba(11, 31, 58, 0.06);
 }
 .tw__rating-score {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
   font-size: 2.2rem;
   line-height: 1;
 }
@@ -340,15 +340,15 @@
   flex-direction: column;
   border-radius: 22px;
   padding: clamp(1.6rem, 3vw, 2.4rem);
-  /* Brand navy — the reference used a dark green card here; recolored to
-     this site's own ink/blue instead of copying the reference's palette.
-     #0B2C4E was itself a 4th stray blue this file's own gradient never
-     got swept up in earlier — this is the actual source-of-truth file
-     for the site's 3-blue system, so it needed the same "deep" tier
-     (#004385) as everywhere else, not a shade of its own. */
-  background: linear-gradient(155deg, #004385 0%, #0B1F3A 100%);
-  border: 1px solid rgba(200, 161, 90, 0.3);
-  box-shadow: 0 30px 70px rgba(1, 20, 40, 0.45);
+  /* White card per request — was a navy gradient (see git history for the
+     old #004385 → #0B1F3A version). Kept the same gradient *direction* and
+     a soft tint rather than flat white, so it still reads as a gradient
+     card, not a plain rectangle; border switched from gold to this site's
+     blue accent (#0D6BB2) to frame it now that gold no longer pops against
+     a light fill the way it did on navy. */
+  background: linear-gradient(155deg, #ffffff 0%, #cfe3f5 100%);
+  border: 1px solid rgba(13, 107, 178, 0.35);
+  box-shadow: 0 30px 70px rgba(11, 31, 58, 0.16);
   overflow: hidden;
 }
 .tw-featured-brand {
@@ -360,7 +360,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(11, 31, 58, 0.7);
   margin-bottom: clamp(1rem, 3vh, 1.6rem);
 }
 .tw-featured-brand-mark {
@@ -374,10 +374,10 @@
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 2.6rem;
   line-height: 0.4;
-  /* Lighter blue than the accent used elsewhere (#0D6BB2) — this sits on
-     the featured card's own dark navy, where that richer blue would have
-     poor contrast; a lighter tint of the same family stays visible here. */
-  color: rgba(125, 180, 235, 0.6);
+  /* Card is white now (was dark navy) — the light blue tint that used to
+     stay visible on navy would nearly disappear here, so this uses the
+     richer accent blue (#0D6BB2) at low opacity instead. */
+  color: rgba(13, 107, 178, 0.35);
   display: block;
   height: 1.8rem;
 }
@@ -405,8 +405,11 @@
   font-weight: 500;
   font-size: var(--tw-quote-size, 1.1rem);
   line-height: 1.5;
-  color: #FBF8F2;
+  color: #0B1F3A;
   margin: 0.6rem 0 clamp(1.2rem, 3vh, 2rem);
+  /* Slight upward nudge — transform rather than a negative margin so it
+     doesn't pull .tw-featured-cite up with it. */
+  transform: translateY(-8px);
 }
 .tw-featured-cite {
   display: flex;
@@ -414,29 +417,28 @@
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1.2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(11, 31, 58, 0.12);
 }
 .tw-featured-name {
   display: block;
   font-weight: 700;
   font-size: 0.9rem;
-  color: #fff;
+  color: #0B1F3A;
 }
 .tw-featured-detail {
   display: block;
   margin-top: 0.15rem;
   font-size: 0.76rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(11, 31, 58, 0.6);
 }
 .tw-featured .tw-stars {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(11, 31, 58, 0.18);
 }
 .tw-featured .tw-stars .is-on {
-  /* Same lighter blue as .tw-featured-quotemark above, for the same
-     reason — the richer #0D6BB2 used elsewhere would sit poorly on this
-     card's own dark navy background. */
-  color: #7DB4EB;
+  /* Card is white now (was dark navy) — the richer accent blue used
+     elsewhere reads fine here (it was the one dimmed for navy above). */
+  color: #0D6BB2;
 }
 
 /* ---- "wall of love" marquee ribbon ---- */

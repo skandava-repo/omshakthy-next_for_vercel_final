@@ -95,7 +95,12 @@
 .ct-slide__content {
   position: relative;
   z-index: 2;
-  max-width: 520px;
+  /* Was a fixed 520px — too narrow once the year-display/underline below
+     were resized to match the original baked-in proportions (the numeral
+     alone needs ~36.6vw at its own natural width). Scales with viewport
+     like everything else in here now. */
+  max-width: clamp(400px, 46vw, 820px);
+  margin-left: -4vw;
 }
 
 .ct-slide__year {
@@ -111,22 +116,125 @@
   margin-bottom: 16px;
 }
 
-.ct-slide__title {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: clamp(28px, 3.5vw, 44px);
+/* Giant hero year (1991, 1993, ...) — the dominant element of the slide.
+   Sized well above .ct-slide__title/.ct-slide__stat-number, which are for
+   secondary text, not this. Ratios re-measured directly off the actual
+   production asset (timeline-1991.jpg, 2400px wide): numeral cap-height
+   322px = 13.42% of image width -> /0.7 cap-height factor = 19.2vw.
+   Reference also shows normal (not bold) weight and tight/normal digit
+   kerning, not the wide tracking this had drifted to — matched below. */
+.ct-slide__year-display {
+  font-family: 'Playfair Display', 'Fraunces', Georgia, serif;
+  font-size: clamp(68px, 16.42vw, 342px);
   font-weight: 400;
+  /* Solid-color fallback for browsers without background-clip: text. */
   color: #004385;
+  line-height: 1;
+  letter-spacing: 0;
+  /* Playfair Display defaults to old-style figures: "9" drops a descender
+     below the baseline (reads taller) while "1" sits at x-height (reads
+     shorter) — uneven digit heights the reference doesn't have. Force
+     lining figures so every digit shares the same cap-height. */
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1, "pnum" 1;
+}
+
+/* Very mild top-to-bottom gradient on the numeral — stays close to the
+   base #004385 (light/dark stops only ~2 shades off it) so it reads as a
+   subtle sheen, not a visibly "gradient-text" effect. Gated behind
+   @supports so browsers without background-clip: text keep the flat
+   #004385 fallback above instead of rendering invisible (transparent)
+   text. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .ct-slide__year-display {
+    background: linear-gradient(180deg, #1c6bb0 0%, #004385 55%, #00325f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+/* Thin rule + dot under the year, matching the accent line used elsewhere
+   in this design (.ct-seg__fill's gradient, .ct-bar__bigyear-label's
+   gold). Purely decorative. */
+.ct-slide__underline {
+  position: relative;
+  width: clamp(140px, 36.3vw, 620px);
+  height: 2px;
+  background: #004385;
+  margin: 18px 0 22px;
+}
+
+.ct-slide__underline::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0D6BB2;
+}
+
+.ct-slide__title {
+  /* Same Didone family as the numeral above it — reference crop shows the
+     same thin-hairline-serif, high-contrast letterforms, not Fraunces'
+     softer/quirkier ones. */
+  font-family: 'Playfair Display', 'Fraunces', Georgia, serif;
+  /* Also re-measured off timeline-1991.jpg: heading cap-height 57px
+     (y 1016-1073) = 2.375% of image width -> /0.7 = 3.39vw, ~3.3vw.
+     Dialed down ~4% from that (26/3.3/75 -> 25/3.17/72) because "SIDCO
+     Partnership" — the longest of the six titles — was wrapping to 2
+     lines by literally 1px against .ct-slide__content's width; this
+     keeps every title, including that one, on a single line. */
+  font-size: clamp(25px, 3.17vw, 72px);
+  font-weight: 400;
+  /* Core stroke color sampled directly off the reference (darkest-decile
+     pixels within the measured text band): rgb(5,58,119) = #053a77 — a
+     genuine medium blue, not the near-black #001d3d this had drifted to. */
+  color: #053a77;
   line-height: 1.2;
-  margin-bottom: 16px;
+  text-transform: uppercase;
+  /* Reference glyph-gap/glyph-width ratio (~0.6, measured off runs in the
+     cropped reference) is scale-invariant, so it was checked directly
+     against the same ratio measured on the live render at 0.12em (came
+     out ~0.38 — under-tracked) and solved for the letter-spacing that
+     closes the gap: ~0.24em. Dialed back down from there per direct
+     feedback that it read as too wide. */
+  letter-spacing: 0.18em;
+}
+
+/* Small standalone dash between the title and the description paragraph
+   — not a border/padding trick, a real separator glyph like the one
+   baked into the original design. */
+.ct-slide__dash {
+  width: 30px;
+  height: 2px;
+  background: #004385;
+  margin: 16px 0 14px;
 }
 
 .ct-slide__desc {
   font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: clamp(14px, 1.3vw, 19px);
   font-weight: 400;
-  color: #555;
-  line-height: 1.7;
+  color: #0a1440;
+  line-height: 1.35;
   margin-bottom: 28px;
+  /* Narrower than .ct-slide__content's own width so the paragraph wraps
+     to three lines instead of two — tested against the 1991 description
+     (longest of the six) via binary search on rendered line count. 53%,
+     not 47%, so "Pvt. Ltd.," stays on line 1 with the rest of the bolded
+     company name instead of wrapping alone onto line 2 (still 3 lines
+     total, just a better break point). */
+  max-width: 53%;
+}
+
+.ct-slide__desc strong {
+  color: #0D6BB2;
+  font-weight: 700;
 }
 
 .ct-slide__stat {
@@ -309,6 +417,119 @@
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: rgba(30, 35, 45, 0.35);
+}
+
+/* ============================================
+   PER-SLIDE OVERRIDES
+   Every .ct-slide__* rule above is a shared baseline used by all six
+   milestones. Each slide also carries a .ct-slide--<year> class (see
+   CinematicTimeline.tsx), so any one milestone can now be styled
+   independently by adding a block below scoped to its year — e.g.
+   .ct-slide--1993 .ct-slide__title { font-size: ...; } — without
+   affecting the other five, which keep using the shared baseline.
+   Empty until a slide actually needs to diverge.
+   ============================================ */
+.ct-slide--1991 .ct-slide__title {
+  /* Same treatment as 1993/1997: reduced size, tighter tracking, slightly
+     bolder than the shared baseline. */
+  font-size: clamp(21px, 2.7vw, 61px);
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+
+.ct-slide--1991 .ct-slide__content {
+  margin-top: 24px;
+}
+.ct-slide--1993 .ct-slide__title {
+  /* "SIDCO Partnership" specifically dialed down from the shared baseline
+     (25/3.17/72 -> 21/2.7/61, ~15% smaller) with tighter tracking
+     (0.18em -> 0.13em) — reduced height and letter-spacing, per-slide
+     only, the other five titles are untouched. */
+  font-size: clamp(21px, 2.7vw, 61px);
+  letter-spacing: 0.13em;
+  /* Slightly bolder than the shared 400 (Playfair Display 500 already
+     loaded in layout.tsx's Google Fonts URL). */
+  font-weight: 500;
+}
+
+.ct-slide--1993 .ct-slide__content {
+  /* Nudged down slightly from the shared baseline position — 1993 only. */
+  margin-top: 34px;
+}
+.ct-slide--1997 .ct-slide__title {
+  /* Same treatment as 1993: tighter tracking than the shared 0.18em,
+     slightly bolder than the shared 400, and the same reduced size
+     ("SIDCO Partnership" style) now that "World City" breaks onto its
+     own line (see the \n in this milestone's title + renderTitle() in
+     the .tsx). */
+  font-size: clamp(21px, 2.7vw, 61px);
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+
+.ct-slide--1997 .ct-slide__content {
+  /* Nudged down slightly from the shared baseline position — 1997 only. */
+  margin-top: 24px;
+}
+.ct-slide--1998 .ct-slide__title {
+  /* Same treatment as 1993/1997/1991: reduced size, tighter tracking,
+     slightly bolder than the shared baseline. */
+  font-size: clamp(21px, 2.7vw, 61px);
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+
+.ct-slide--1998 .ct-slide__content {
+  margin-top: 24px;
+}
+
+.ct-slide--2000 .ct-slide__year-display {
+  /* Numeral "2000" specifically, 20% smaller than the shared baseline
+     (68/16.42vw/342 -> 54/13.14vw/274). */
+  font-size: clamp(54px, 13.14vw, 274px);
+}
+
+.ct-slide--2000 .ct-slide__underline {
+  /* Scaled down to match the 20%-smaller "2000" numeral above it (shared
+     baseline 140/36.3vw/620 -> 112/29.04vw/496), so the rule stays
+     proportional to the numeral instead of overhanging it. */
+  width: clamp(112px, 29.04vw, 496px);
+}
+
+.ct-slide--2000 .ct-slide__title {
+  /* "Corporate Giants" 10% smaller than the other titles' shared 21/2.7vw/61
+     override (21/2.7/61 -> 19/2.43/55). */
+  font-size: clamp(19px, 2.43vw, 55px);
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+
+.ct-slide--2000 .ct-slide__content {
+  margin-top: 24px;
+}
+
+.ct-slide--2024 .ct-slide__year-display {
+  /* Same treatment as 2000: numeral 20% smaller than the shared baseline
+     (68/16.42vw/342 -> 54/13.14vw/274). */
+  font-size: clamp(54px, 13.14vw, 274px);
+}
+
+.ct-slide--2024 .ct-slide__underline {
+  /* Scaled to match the 20%-smaller numeral, same as 2000
+     (140/36.3vw/620 -> 112/29.04vw/496). */
+  width: clamp(112px, 29.04vw, 496px);
+}
+
+.ct-slide--2024 .ct-slide__title {
+  /* "Legacy Continues" 10% smaller than the other titles' shared
+     21/2.7vw/61 override, same as 2000 (21/2.7/61 -> 19/2.43/55). */
+  font-size: clamp(19px, 2.43vw, 55px);
+  letter-spacing: 0.13em;
+  font-weight: 500;
+}
+
+.ct-slide--2024 .ct-slide__content {
+  margin-top: 24px;
 }
 
 /* ---- Responsive ---- */

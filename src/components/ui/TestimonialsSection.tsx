@@ -211,8 +211,8 @@ const highlights = [
    layout), so the quote's type scales to fit it instead — same idea the old
    deck used, kept here for the same reason. */
 const quoteSize = (len: number) => {
-  const size = 1.35 - Math.max(0, len - 100) * 0.0022
-  return `${Math.max(1.05, Math.min(1.35, size)).toFixed(3)}rem`
+  const size = 1.55 - Math.max(0, len - 100) * 0.0022
+  return `${Math.max(1.25, Math.min(1.55, size)).toFixed(3)}rem`
 }
 
 const PlayIcon = () => (
